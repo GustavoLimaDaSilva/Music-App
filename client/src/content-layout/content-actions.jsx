@@ -4,12 +4,15 @@ import FollowButton from "../components/follow-button"
 
 export default function ContentActions({ content }) {
 
+    console.log(content)
     return (
         <div className="actions-bar">
-            <PlayAll  tracks={content.tracks.items} />
+            <PlayAll  tracks={content?.tracks?.items || content.topTracks} />
             {content.type === 'artist' ? <FollowButton id={content.id} type={content.type} />
                 :
-                <SaveToLibrary id={content.id} type={content.type} />
+                content.type !== 'playlist' ? 
+                <SaveToLibrary id={content.id} type={content.type} /> 
+                : null
             }
         </div>
     )
