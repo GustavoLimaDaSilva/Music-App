@@ -1,7 +1,7 @@
 
 import Item from "../item/Item"
 
-export default function ContentList({ tracks, context,image }) {
+export default function ContentList({ tracks, context }) {
 
     return (
         
@@ -11,8 +11,7 @@ export default function ContentList({ tracks, context,image }) {
                 if (item === undefined) return
                 
 
-                return <Item key={item.id} item={context === 'playlists' ?item.track :
-                    context === 'albums' ? {...item, albumImage: image} : item} context={context} />
+                return <Item key={item.id} item={ item} context={context} />
             })}
         </ul>
     )
