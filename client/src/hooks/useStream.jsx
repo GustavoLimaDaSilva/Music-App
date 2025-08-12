@@ -3,26 +3,33 @@ import { PlayerContext } from '../playerProvider';
 import { AuthContext } from '../authProvider';
 import { getTopTracks } from "../..";
 
-export default function useStream(track = null) {
+export default function useStream(tracks = []) {
 
-    const [stream, setToStream] = useState(track)
-    const {userCredentials} = useContext(AuthContext)
+    const [toStream, setToStream] = useState(tracks)
+    const { userCredentials } = useContext(AuthContext)
     const { isReady, deviceID, setIsPlaying, queue, setQueue } = useContext(PlayerContext)
 
     useEffect(() => {
 
         async function handleStream() {
 
-            if (deviceID && userCredentials.accessToken && stream) {
+            if (deviceID && userCredentials.accessToken && toStream.length !== 0) {
 
                 setIsPlaying(true)
-                const topTracks = await getTopTracks(stream.artists?.[0].id, userCredentials.accessToken)
-                setQueue({ list: [stream, ...topTracks], offset: 0 })
+                setQueue({ list: toStream, offset: 0 })
+
+                if (toStream.length === 1) {
+                    
+                    const topTracks = await getTopTracks(toStream[0].artists?.[0].id, userCredentials.accessToken)
+                    .then(tracks => tracks.filter(track => track.id !== toStream[0].id))
+
+                    setQueue({ list: [...toStream, ...topTracks], offset: 0 })                
+                }
             }
 
         }
         handleStream()
-    }, [stream, isReady, userCredentials.accessToken])
+    }, [toStream, isReady, userCredentials.accessToken])
 
-    return [track, setToStream]
+    return [toStream, setToStream]
 }

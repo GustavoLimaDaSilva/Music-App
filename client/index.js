@@ -290,6 +290,26 @@ export async function getContent(type, id, accessToken) {
 
         data.topTracks = topTracks
     }
+
+    if (type === 'albums') {
+
+        data.tracks.items.map(item => {
+
+            item.albumImage = data.images[0].url
+        })
+    }
+
+    if (type === 'playlists') {
+
+        data.tracks.items = data.tracks.items.map(item => {
+
+            const newObj = { ...item, ...item.track }
+            delete newObj.track
+
+            return newObj
+        })
+    }
+    console.log(data.tracks.items)
     return data
 }
 
@@ -304,7 +324,6 @@ export async function getTopTracks(artistId, accessToken) {
     })
 
     const data = await response.json()
-
     return data.tracks
 }
 
@@ -521,7 +540,7 @@ export async function isAlreadySaved(id, accessToken, type) {
             'Authorization': `Bearer ${accessToken}`
         }
     });
-    
+
     if (response.ok) {
         const data = await response.json()
         return data[0]
@@ -540,9 +559,4 @@ export async function handleSaving(isSaved, accessToken, ids, type) {
         },
         body: JSON.stringify({ ids: ids }),
     });
-}
-
-export async function saveToLibrary() {
-
-
 }

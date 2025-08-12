@@ -15,7 +15,7 @@ export default function ItemInfoContainer({ item, context }) {
     const { isPremium } = useContext(AccountContext)
     const { userCredentials } = useContext(AuthContext)
     const [isActive, setIsActive] = useActivate(itemRef)
-    const [stream, setToStream] = useStream()
+    const [ToStream, setToStream] = useStream()
 
     useEffect(() => {
 
@@ -24,8 +24,7 @@ export default function ItemInfoContainer({ item, context }) {
 
                 if (isPremium) {
 
-                    const topTracks = await getTopTracks(item.artists?.[0].id, userCredentials.accessToken)
-                    setToStream([item, ...topTracks])
+                    setToStream([item])
                 }
                 else if (!isPremium) {
                     previewRef.current = await getPreview(item.name, item.artist.name)
