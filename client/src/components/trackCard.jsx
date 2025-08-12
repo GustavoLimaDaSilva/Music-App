@@ -6,12 +6,12 @@ import useStream from "../hooks/useStream";
 export default function trackCard({ item }) {
 
     const [isMobile, setIsMobile] = useMobile()
-    const [stream, setStream] = useStream()
+    const [toStream, setToStream] = useStream()
 
     return (
-        <div onClick={isMobile ? () => setStream(item) : null}>
+        <div onClick={isMobile ? () => setToStream(item) : null}>
             <img src={item.album?.images?.[0].url} className={'card-img'} />
-            <p className="card-title" onClick={!isMobile ? () => setStream(item): null}>{item.name}</p>
+            <p className="card-title" onClick={!isMobile ? () => setToStream([item]): null}>{item.name}</p>
             <p className="card-subtitle">{isMobile ?
                 item.artists[0].name
                 :
