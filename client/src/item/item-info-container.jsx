@@ -11,7 +11,7 @@ export default function ItemInfoContainer({ item, context }) {
     const itemRef = useRef(null)
     const audioRef = useRef(null)
     const previewRef = useRef(null)
-    const { isReady, isPlaying } = useContext(PlayerContext)
+    const { isReady, isPlaying, setCurrentTrack } = useContext(PlayerContext)
     const { isPremium } = useContext(AccountContext)
     const { userCredentials } = useContext(AuthContext)
     const [isActive, setIsActive] = useActivate(itemRef)
@@ -23,8 +23,8 @@ export default function ItemInfoContainer({ item, context }) {
             if (isActive) {
 
                 if (isPremium) {
-
                     setToStream([item])
+                    setCurrentTrack(item)
                 }
                 else if (!isPremium) {
                     previewRef.current = await getPreview(item.name, item.artist.name)
@@ -39,12 +39,10 @@ export default function ItemInfoContainer({ item, context }) {
     }, [isActive, isReady, userCredentials.accessToken, isPlaying])
 
     return (
-
-
-        <div className="item-info-container" ref={itemRef} onClick={async () => {
+        <div className="item-info-container" ref={itemRef} onClick={item.type === 'track' ? async () => {
 
             setIsActive(prev => !prev)
-        }}>
+        } : null}>
             <audio src={previewRef.current} ref={audioRef} />
             <p className="title">{item.name}</p>
             {context !== 'artists' &&
