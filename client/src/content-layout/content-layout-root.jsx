@@ -34,7 +34,7 @@ export default function ContentLayoutRoot() {
         content === undefined ? <Loading /> :
             <div className="content-layout-root">
                 <ContentPresentation headerContent={content} />
-                <ContentList tracks={content.context === 'albums' || 'playlists' ?  content.tracks.items : content.topTracks} context={content.context} />
+                <ContentList tracks={content.items} context={content.context} />
             </div>
     )
 }

@@ -285,23 +285,24 @@ export async function getContent(type, id, accessToken) {
     const data = await res.json()
     data.context = type
 
-    if (type === 'artists') {
-        const topTracks = await getTopTracks(id, accessToken)
 
-        data.topTracks = topTracks
+    return normalizeContent(data, type, accessToken)
+}
+
+async function normalizeContent(data, type, accessToken) {
+
+    if (type === 'artists') {
+        const topTracks = await getTopTracks(data.id, accessToken)
+
+        data.items = topTracks
     }
 
     if (type === 'albums') {
 
-        data.tracks.items.map(item => {
+        data.items = data.tracks.items.map(item => {
 
             item.albumImage = data.images[0].url
-        })
-    }
 
-    if (type === 'playlists') {
-
-        data.tracks.items = data.tracks.items.map(item => {
 
             const newObj = { ...item, ...item.track }
             delete newObj.track
@@ -309,7 +310,18 @@ export async function getContent(type, id, accessToken) {
             return newObj
         })
     }
-    console.log(data.tracks.items)
+
+    if (type === 'playlists') {
+
+        data.items = data.tracks.items.map(item => {
+
+            const newObj = { ...item, ...item.track }
+            delete newObj.track
+
+            return newObj
+        })
+    }
+
     return data
 }
 
@@ -475,13 +487,13 @@ export async function resume(accessToken, position_ms, track) {
 
 }
 
-export function setTrackTimer(trackDuration, queue, setQueue) {
+export function setTrackTimer(track, queue, setQueue, playNext, setPlayNext, setCurrentTrack) {
 
 
 
     const previousPercentage = parseInt(getComputedStyle(document.querySelector('.progress-bar')).getPropertyValue('--progress-width'))
 
-    let durationInSecs = convertToSecs(trackDuration)
+    let durationInSecs = convertToSecs(track.duration_ms)
 
     let progress = previousPercentage > 0 ? (previousPercentage * durationInSecs / 100) : 0
 
@@ -491,7 +503,13 @@ export function setTrackTimer(trackDuration, queue, setQueue) {
 
 
             clearInterval(timer)
-            setQueue({ list: [...queue.list], offset: queue.offset + 1 })
+            if (playNext.length > 0) {
+                setCurrentTrack(playNext[0]);
+                setPlayNext(prev => prev.slice(1));
+            } else {
+                setQueue({ list: [...queue.list], offset: queue.offset + 1 })
+                setCurrentTrack(queue.list[queue.offset + 1])
+            }
         }
         progress += 1
 
@@ -500,6 +518,13 @@ export function setTrackTimer(trackDuration, queue, setQueue) {
     }, 1000)
     return timer
 }
+
+// export function playNext(track, queue, setQueue) {
+
+//     const updatedQueue = queue.list.toSpliced(queue.offset + 1, 0, track)
+
+//     setQueue({list: [...updatedQueue], offset: queue.offset})
+// }
 
 function updateProgressBar(percentage) {
 
@@ -559,4 +584,17 @@ export async function handleSaving(isSaved, accessToken, ids, type) {
         },
         body: JSON.stringify({ ids: ids }),
     });
+}
+
+
+export function randomize(queue) {
+console.log(queue)
+    const copy = [...queue.list];
+    for (let i = copy.length - 1; i > queue.offset; i--) {
+        const min = Math.ceil(queue.offset + 1);
+        const j = Math.floor(Math.random() * (i - min) + min)
+
+      if(j)  [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy
 }
