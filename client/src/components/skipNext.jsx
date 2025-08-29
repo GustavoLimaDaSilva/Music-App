@@ -20,7 +20,7 @@ export default function SkipNext() {
                 setIsPlaying(true)
             } else {
                 setQueue({ list: [...queue.list], offset: queue.offset + 1 })
-                setCurrentTrack({...queue.list[queue.offset + 1]})
+                setCurrentTrack(queue.list[queue.offset + 1])
             }
         }}>
             <FontAwesomeIcon icon={faForward} className={queue.offset + 1 === queue.list?.length ? "disabled" : ""}/>
