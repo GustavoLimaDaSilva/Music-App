@@ -15,7 +15,7 @@ export default function Home() {
 
     return (        
             <PlayerContext.Provider value={{ isBeingPlayed, setIsBeingPlayed }}>
-                <div className="content-wrapper glass">
+                <div className={userInput === '' ? 'content-wrapper glass' : 'content-wrapper'}>
                     {userInput === '' ?
                         <>
                             <UserTopItems title='Top Recommendations' type='tracks'/>
@@ -25,7 +25,6 @@ export default function Home() {
                     <Outlet context={userInput} />
                     }
                                    </div>
-                {/* <PlayBar /> */}
             </PlayerContext.Provider>
     )
 }
