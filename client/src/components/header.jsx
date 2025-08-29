@@ -15,9 +15,7 @@ export default function Header({userInput, setUserInput}) {
             <h1>logo</h1>
         </div>
         <SearchBar userInput={userInput} setUserInput={setUserInput} />
-        <div className="user-area">
-            {userCredentials.accessToken ? <Profile /> : <button className='not-a-button' onClick={() => logIn()}>Sign In</button>}
-        </div>
+         <Profile /> 
     </div>);
 
 }
