@@ -5,7 +5,7 @@ export default function ContentList({ tracks, context }) {
 
     return (
         
-        <ul className="track-list glass">
+        <ul className="track-list">
             {tracks.length === 0 ? 'loading' : tracks.map(item => {
                 
                 if (item === undefined) return

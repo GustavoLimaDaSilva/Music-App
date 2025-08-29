@@ -1,15 +1,12 @@
 import DropdownMenu from '../components/dropdown-menu';
 import TrackDropdownOptions from '../components/track-dropdown-options';
 import ItemInfoContainer from './item-info-container';
-import ItemImg from './item-img';
-import { useContext, useRef } from 'react';
-import contentAdapter from '../../content-adapter';
 import { Link } from 'react-router';
 
 export default function Item({ item, context }) {
-console.log(item.type)
+
     return (
-        <li className="item">
+        <li className="item glass">
 
             {context !== 'albums' &&
                 <img src={item.type === 'track' ? item?.album?.images?.[0]?.url : item?.images?.[0]?.url} alt={`${item.name}'s cover`}
@@ -30,5 +27,3 @@ console.log(item.type)
         </li>
     )
 }
-
-// criar um componente para o tipo do dado
