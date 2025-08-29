@@ -6,7 +6,8 @@ import { useEffect, useContext, useState } from "react";
 import { getContent } from "../..";
 import { useLocation, useOutletContext } from "react-router";
 import { AuthContext } from '../authProvider'
-import Loading from "../components/loading";
+import Loading from "../components/spinner";
+import LoaderState from "../components/loaderState";
 
 export default function ContentLayoutRoot() {
 
@@ -16,25 +17,32 @@ export default function ContentLayoutRoot() {
 
     useEffect(() => {
 
-        async function fetchContent() {
-            const path = location.pathname.split('/')
-            const type = path[1]
-            const id = path[2]
+        fetchContent(setContent, userCredentials.accessToken)
 
-            const res = await getContent(type, id, userCredentials.accessToken)
+    }, [userCredentials.accessToken, location.pathname])
 
-            if (res) setContent({...res, context: type})
-        }
-
-        fetchContent()
-
-    }, [userCredentials.accessToken])
-
+    
     return (
-        content === undefined ? <Loading /> :
+        content === undefined ?
+            <div className="content-layout-root glass">
+                <LoaderState callback={() => fetchContent(setContent, userCredentials.accessToken)}/>
+            </div>
+            :
             <div className="content-layout-root">
                 <ContentPresentation headerContent={content} />
-                <ContentList tracks={content.items} context={content.context} />
+                <ContentList tracks={content.items
+
+                } context={content.context} />
             </div>
     )
+}
+
+async function fetchContent(setContent, accessToken) {
+    const path = location.pathname.split('/')
+    const type = path[1]
+    const id = path[2]
+
+    const res = await getContent(type, id, accessToken)
+
+    setContent(res)
 }

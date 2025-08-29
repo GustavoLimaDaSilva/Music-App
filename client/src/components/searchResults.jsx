@@ -1,10 +1,9 @@
 import { searchItem, formatData } from '../../index.js';
-import Loading from './loading';
-import {useOutletContext} from 'react-router'
-import { useState, useEffect, useContext} from 'react';
+import LoaderState from "../components/loaderState";
+import { useOutletContext } from 'react-router'
+import { useState, useEffect, useContext } from 'react';
 import ItemRoot from '../item/Item';
 import { AuthContext } from '../authProvider.jsx';
-import contentAdapter from '../../content-adapter.js';
 
 export default function SearchResults() {
 
@@ -14,21 +13,26 @@ export default function SearchResults() {
 
     useEffect(() => {
 
-        async function fetchData() {
-            const response = await searchItem(userInput, userCredentials.accessToken)
-            
-            setSearchedItems(response)
-        }
-        fetchData()
-    }, [userInput])
-    
+
+        fetchData(userInput, userCredentials.accessToken, setSearchedItems)
+
+    }, [userInput, userCredentials.accessToken])
+
     return <div className='track-list'>
-        {searchedItems === undefined ? <Loading /> : searchedItems.map(item => {
-            
+        {searchedItems === undefined ? <div className="content-layout-root glass">
+            <LoaderState callback={() => fetchData(userInput, userCredentials.accessToken, setSearchedItems)} />
+        </div> : searchedItems.map(item => {
+
             if (item === null || item?.images?.length === 0) return
 
-            
-            return <ItemRoot key={item.id} item={item}/>
+
+            return <ItemRoot key={item.id} item={item} />
         })}
     </div>;
+}
+
+async function fetchData(userInput, accessToken, setSearchedItems) {
+    const response = await searchItem(userInput, accessToken)
+
+    setSearchedItems(response)
 }

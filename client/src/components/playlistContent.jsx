@@ -3,9 +3,9 @@ import { AuthContext } from '../authProvider'
 import { useLocation } from "react-router"
 import { getPlaylistData } from "../.."
 import ContentPresentation from "../content-layout/content-presentation"
-import Loading from "./loading"
 import ContentActions from "../content-layout/content-actions"
 import ContentList from "../content-layout/content-list"
+import LoaderState from "./loaderState"
 
 export default function PlaylistContent() {
 
@@ -27,8 +27,7 @@ export default function PlaylistContent() {
 
     
     return (
-        playlistData === undefined ? <Loading />
-            :
+        playlistData === undefined ? <LoaderState />  :
             <div className="content-layout-root">
                 <ContentPresentation headerContent={playlistData} />
                 <ContentActions type={playlistData.type} />
