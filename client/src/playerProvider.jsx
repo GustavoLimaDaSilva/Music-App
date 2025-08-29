@@ -34,7 +34,7 @@ export default function PlayerProvider({ children }) {
         if (Object.keys(queue).length === 0) {
             return setQueue(JSON.parse(localStorage.getItem('queue')) || {})
         }
-        if (!currentTrack) JSON.parse(localStorage.getItem(currentTrack))
+        if (!currentTrack) setCurrentTrack(JSON.parse(localStorage.getItem(currentTrack)))
     }, [])
 
 
