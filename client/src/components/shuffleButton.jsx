@@ -1,6 +1,10 @@
 import { randomize } from "../.."
 import { useContext, useRef, useState, useEffect } from "react"
 import { PlayerContext } from "../playerProvider"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPause } from '@fortawesome/free-solid-svg-icons';
+import { faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function ShuffleButton() {
 
@@ -10,7 +14,7 @@ export default function ShuffleButton() {
 
     
 
-    return (<button className='not-a-button' onClick={() => {
+    return (<button className='not-a-button shuffle-button' onClick={() => {
 
         if (isShuffle) {
          
@@ -20,11 +24,10 @@ export default function ShuffleButton() {
 
         originalQueue.current = queue.list
         const randomQueue = randomize(queue)
-
         setQueue({ list: randomQueue, offset: queue.offset })
         setIsShuffle(true)
     }}
     >
-        <i className={isShuffle ? 'fas fa-shuffle' : 'fa-solid fa-arrow-right'}></i>
+    {isShuffle ? <FontAwesomeIcon icon={faShuffle}/> : <FontAwesomeIcon icon={faArrowRight}/>}
     </button>)
 }

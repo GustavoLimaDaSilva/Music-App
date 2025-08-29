@@ -2,27 +2,28 @@ import { useContext, useState, useEffect, useRef } from "react"
 import { AuthContext } from "../authProvider"
 import { pause, resume, startTrack } from "../.."
 import { PlayerContext } from "../playerProvider"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPause } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
-export default function PlayerButton({ songDuration }) {
+export default function PlayerButton() {
 
     const { userCredentials } = useContext(AuthContext)
-    const { deviceID, setIsPlaying, isPlaying, queue } = useContext(PlayerContext)
+    const { deviceID, setIsPlaying, isPlaying, currentTrack } = useContext(PlayerContext)
 
-    
-
-    return (
+        return (
 
         <button className="not-a-button" onClick={async () => {
 
             if (isPlaying) {
-                await pause(userCredentials.accessToken, queue.list[queue.offset])
+                await pause(userCredentials.accessToken, currentTrack)
             } else {
                 await resume(userCredentials.accessToken)
             }
 
             setIsPlaying(prev => !prev)
         }}>
-            <i className={isPlaying ? 'fa fa-pause' : 'fa fa-play'}></i>
+            {isPlaying ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}
         </button >
     )
 }
