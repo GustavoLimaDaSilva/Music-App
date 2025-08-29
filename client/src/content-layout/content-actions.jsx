@@ -4,10 +4,9 @@ import FollowButton from "../components/follow-button"
 
 export default function ContentActions({ content }) {
 
-    console.log(content)
     return (
         <div className="actions-bar">
-            <PlayAll  tracks={content?.tracks?.items || content.topTracks} />
+            <PlayAll  tracks={content.items} />
             {content.type === 'artist' ? <FollowButton id={content.id} type={content.type} />
                 :
                 content.type !== 'playlist' ? 

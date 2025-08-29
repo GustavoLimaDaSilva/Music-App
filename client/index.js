@@ -1,18 +1,14 @@
-async function sha256(plain) {
-    const encoder = new TextEncoder()
-    const data = encoder.encode(plain)
+export const safe = (fn) =>
+    async (...args) => {
 
-    return window.crypto.subtle.digest('SHA-256', data)
-}
+        try {
+            return await fn(...args)
+        } catch (err) {
 
-const base64encode = (input) => {
-    return btoa(String.fromCharCode(...new Uint8Array(input)))
-        .replace(/=/g, '')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_');
-}
+            console.error('failed to fetch:', err)
+        }
 
-
+    }
 
 export async function logIn() {
 
@@ -22,16 +18,21 @@ export async function logIn() {
 }
 
 
-
-export async function getToken() {
+export const getToken = safe(async() => {
 
     const query = getQueryParams()
 
     if (query.code) {
         const response = await fetch(`api/auth/getToken/${query.code}/${query.state}`)
-        return await response.json()
+        const data = await response.json()
+
+        if (data.error) {
+            throw new Error(data.error)
+        }
+
+        return data
     }
-}
+})
 
 export async function refreshAccessToken() {
 
@@ -55,44 +56,6 @@ export async function refreshAccessToken() {
             return data
         }
     }
-}
-
-
-function toLoginPage(navigate, refreshTokenTimer) {
-
-    navigate('/Login')
-    localStorage.clear()
-    clearInterval(refreshTokenTimer)
-}
-
-
-async function handleLogIn(navigate, refreshTokenTimer) {
-
-    const tokensStored = await handleTokensStorage()
-
-    if (!tokensStored) return
-
-    refreshTokenTimer = setInterval(async () => await refreshAccessToken(), 3500000)
-
-    navigate('/Home')
-    window.history.replaceState(null, "", window.location.pathname)
-}
-
-
-export async function logInSpotify() {
-
-    const code_verifier = generateRandomString(64)
-    window.localStorage.setItem('codeVerifier', code_verifier)
-    const hashed = await sha256(code_verifier)
-    const codeChallenge = base64encode(hashed)
-
-    const scope = 'streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state%20user-read-currently-playing%20user-follow-read'
-
-
-    const call = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${scope}&code_challenge_method=S256&code_challenge=${codeChallenge}&redirect_uri=${redirectUri}`
-
-
-    window.location.href = call.toString()
 }
 
 
@@ -172,7 +135,9 @@ async function handleTokensStorage() {
 }
 
 
-export async function getProfile(accessToken) {
+export const getProfile = safe(async (accessToken) => {
+
+    if (!accessToken) return
 
     const res = await fetch('https://api.spotify.com/v1/me', {
         headers: {
@@ -181,9 +146,12 @@ export async function getProfile(accessToken) {
     })
 
     const data = await res.json()
+    if (data.error) {
+        throw new Error(`${data.error.message} at getProfile`)
+    }
 
     return data
-}
+})
 
 export async function getAllGenres() {
 
@@ -195,21 +163,24 @@ export async function getAllGenres() {
     localStorage.setItem('genres', JSON.stringify(data))
 }
 
-export async function getUserTopItems(accessToken, type) {
-
+export const getUserTopItems = safe(async (accessToken, type) => {
     if (!accessToken) return
-
-
+    
+    
     const res = await fetch(`https://api.spotify.com/v1/me/top/${type}`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken
         }
     })
-
+    
     const data = await res.json()
+    
+    if (data.error) {
+        throw new Error(`${data.error.message} at getUserTopItems`)
+    }
 
     return data
-}
+})
 
 export function getQueryParams() {
 
@@ -224,7 +195,7 @@ export function deleteQueryString() {
     window.location.search = ''
 }
 
-export async function searchItem(item, accessToken) {
+export const searchItem = safe(async(item, accessToken) => {
 
     if (item === undefined || item === null || item === '' || !accessToken) return
 
@@ -237,6 +208,11 @@ export async function searchItem(item, accessToken) {
 
     const data = await res.json()
 
+     if (data.error) {
+        
+        throw new Error(`${data.error.message} at searchItem`)
+    }
+
     const mixedData = [
         ...data.tracks.items,
         ...data.artists.items,
@@ -245,7 +221,7 @@ export async function searchItem(item, accessToken) {
     ]
 
     return mixedData
-}
+})
 
 export function formatData(items) {
 
@@ -272,9 +248,8 @@ export function toCaptitalize(str) {
 
 }
 
-export async function getContent(type, id, accessToken) {
+export const getContent = safe(async (type, id, accessToken) => {
 
-    if (!accessToken) return
 
     const res = await fetch(`https://api.spotify.com/v1/${type}/${id}`, {
         headers: {
@@ -282,12 +257,19 @@ export async function getContent(type, id, accessToken) {
         }
     })
 
+
+
     const data = await res.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at getContent`)
+    }
+
     data.context = type
 
 
     return normalizeContent(data, type, accessToken)
-}
+})
 
 async function normalizeContent(data, type, accessToken) {
 
@@ -325,7 +307,7 @@ async function normalizeContent(data, type, accessToken) {
     return data
 }
 
-export async function getTopTracks(artistId, accessToken) {
+export const getTopTracks = safe(async (artistId, accessToken) => {
 
     if (!artistId || !accessToken) return
 
@@ -336,10 +318,13 @@ export async function getTopTracks(artistId, accessToken) {
     })
 
     const data = await response.json()
+    if (data.error) {
+        throw new Error(`${data.error.message} at getTopTracks`)
+    }
     return data.tracks
-}
+})
 
-export async function getPlaylists(userId, accessToken) {
+export const getPlaylists = safe(async (userId, accessToken) => {
 
     const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
 
@@ -347,13 +332,19 @@ export async function getPlaylists(userId, accessToken) {
             'Authorization': `Bearer ${accessToken}`
         }
     })
-    const playlists = await response.json()
+    const data = await response.json()
 
-    return playlists.items
-}
+    if (data.error) {
+        throw new Error(`${data.error.message} at getPlaylists`)
+    }
+
+    return data.items
+})
 
 
-export async function getPlaylistData(playlistId, accessToken) {
+export const getPlaylistData = safe(async (playlistId, accessToken) => {
+
+    if (!accessToken) return
 
     const res = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
         headers: {
@@ -362,18 +353,26 @@ export async function getPlaylistData(playlistId, accessToken) {
 
     })
 
-    return await res.json()
+    const data = await res.json()
 
-}
+    if (data.error) {
+        throw new Error(`${data.error.message} at getPlaylistData`)
+    }
 
-export async function getPreview(songName, artistName) {
+    return data
+})
 
-    const res = await fetch(`/api/preview/${songName}/${artistName}&order=RANKING&limit=1`)
+export const getPreview = safe(async (songName, artistName) => {
+
+    const res = await fetch(`/api/preview/${songName}/${artistName}`)
 
     const data = await res.json()
 
+    if (data.error) {
+        throw new Error(`${data.error.message} at getPreview`)
+    }
     return data.data[0].preview
-}
+})
 
 export function createNewPlayer(accessToken, setIsReady, setPlayer, setDeviceId) {
 
@@ -418,19 +417,25 @@ export async function deviceAvailable(accessToken) {
         }
     })
 
-    if (res.ok) {
 
-        const data = await res.json()
-        return data
+    const data = await res.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at deviceAvailable`)
     }
+
+    return data
+
 }
+
+
+
 
 export async function startTrack(deviceId, accessToken, track) {
 
     if (!deviceId || !accessToken || !track) return
-
-    const req = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-
+    const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+        
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer ' + accessToken,
@@ -440,6 +445,12 @@ export async function startTrack(deviceId, accessToken, track) {
             "uris": [track.uri]
         })
     })
+
+    const data = await res.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at startTrack`)
+    }
 }
 
 
@@ -448,7 +459,7 @@ export async function pause(accessToken, track) {
     if (!accessToken || !track) return
 
 
-    await fetch("https://api.spotify.com/v1/me/player/pause", {
+    const res = await fetch("https://api.spotify.com/v1/me/player/pause", {
         method: "PUT",
         headers: {
             Authorization: "Bearer " + accessToken,
@@ -458,6 +469,12 @@ export async function pause(accessToken, track) {
             "uris": [track.uri]
         })
     });
+
+    // const data = await res.json()
+
+    // if (data.error) {
+    //     throw new Error(`${data.error.message} at pause`)
+    // }
 }
 
 export async function resume(accessToken, position_ms, track) {
@@ -478,17 +495,16 @@ export async function resume(accessToken, position_ms, track) {
         });
     }
 
-    const response = await fetch("https://api.spotify.com/v1/me/player/play", options);
+    const res = await fetch("https://api.spotify.com/v1/me/player/play", options);
 
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        console.error("Spotify API error:", response.status, error);
-    }
+    // const data = await res.json()
 
+    // if (data.error) {
+    //     throw new Error(`${data.error.message} at resume`)
+    // }
 }
 
 export function setTrackTimer(track, queue, setQueue, playNext, setPlayNext, setCurrentTrack) {
-
 
 
     const previousPercentage = parseInt(getComputedStyle(document.querySelector('.progress-bar')).getPropertyValue('--progress-width'))
@@ -500,7 +516,6 @@ export function setTrackTimer(track, queue, setQueue, playNext, setPlayNext, set
     const timer = setInterval(() => {
 
         if (progress >= durationInSecs) {
-
 
             clearInterval(timer)
             if (playNext.length > 0) {
@@ -566,17 +581,22 @@ export async function isAlreadySaved(id, accessToken, type) {
         }
     });
 
-    if (response.ok) {
-        const data = await response.json()
-        return data[0]
+
+    const data = await response.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at isAlreadySaved`)
     }
+
+    return data[0]
+
 }
 
 export async function handleSaving(isSaved, accessToken, ids, type) {
 
     if (!accessToken) return
 
-    const response = await fetch(`https://api.spotify.com/v1/me/${type === 'artist' ? 'following' : 'albums'}?${type === 'artist' ? 'type=artist&' : ''}ids=${ids}`, {
+    const res = await fetch(`https://api.spotify.com/v1/me/${type === 'artist' ? 'following' : 'albums'}?${type === 'artist' ? 'type=artist&' : ''}ids=${ids}`, {
         method: isSaved ? 'DELETE' : 'PUT',
         headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -584,17 +604,25 @@ export async function handleSaving(isSaved, accessToken, ids, type) {
         },
         body: JSON.stringify({ ids: ids }),
     });
+
+       const data = await res.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at handleSaving`)
+    }
+
+
 }
 
 
 export function randomize(queue) {
-console.log(queue)
+    console.log(queue)
     const copy = [...queue.list];
     for (let i = copy.length - 1; i > queue.offset; i--) {
         const min = Math.ceil(queue.offset + 1);
         const j = Math.floor(Math.random() * (i - min) + min)
 
-      if(j)  [copy[i], copy[j]] = [copy[j], copy[i]];
+        if (j) [copy[i], copy[j]] = [copy[j], copy[i]];
     }
     return copy
 }
