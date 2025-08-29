@@ -2,8 +2,6 @@
 
 import { Outlet, useOutletContext } from 'react-router'
 import { useState, useContext, createContext } from 'react'
-import SearchResults from './searchResults'
-import Navbar from './navbar'
 import UserTopItems from './user-top-items'
 export const PlayerContext = createContext(null)
 
