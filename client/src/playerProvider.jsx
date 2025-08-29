@@ -10,12 +10,15 @@ export default function PlayerProvider({ children }) {
     const { userCredentials } = useContext(AuthContext)
     const accessToken = userCredentials.accessToken
     const { isPremium } = useContext(AccountContext)
+
     const [player, setPlayer] = useState(null)
     const [isReady, setIsReady] = useState(false)
     const [deviceID, setDeviceID] = useState(null)
     const [isPlaying, setIsPlaying] = useState(false)
+
+    const [playNext, setPlayNext] = useState([])
     const [queue, setQueue] = useState({})
-    const prevTrackRef = useRef(null)
+    const [currentTrack, setCurrentTrack] = useState(JSON.parse(localStorage.getItem('currentTrack')))
 
     useEffect(() => {
 
@@ -31,7 +34,9 @@ export default function PlayerProvider({ children }) {
         if (Object.keys(queue).length === 0) {
             return setQueue(JSON.parse(localStorage.getItem('queue')) || {})
         }
+        if (!currentTrack) JSON.parse(localStorage.getItem(currentTrack))
     }, [])
+
 
     useEffect(() => {
 
@@ -39,25 +44,8 @@ export default function PlayerProvider({ children }) {
     }, [queue])
 
 
-    useEffect(() => {
-
-        if (Object.keys(queue).length === 0) return
-
-        const prevTrack = prevTrackRef.current
-        const isNewTrack = !prevTrack || prevTrack?.id !== queue.list[queue.offset].id
-
-        async function startSong() {
-            await startTrack(deviceID, userCredentials.accessToken, queue.list[queue.offset])
-        }
-
-        if (isPlaying && isNewTrack) {
-            prevTrackRef.current = queue.list[queue.offset]
-            startSong()
-        }
-    }, [queue.list?.[queue.offset]?.id, isPlaying])
-
     return (
-        <PlayerContext.Provider value={{ deviceID, isReady, setIsReady, isPlaying, setIsPlaying, queue, setQueue }}>
+        <PlayerContext.Provider value={{ deviceID, isReady, setIsReady, isPlaying, setIsPlaying, queue, setQueue, playNext, setPlayNext, currentTrack, setCurrentTrack }}>
             {children}
         </PlayerContext.Provider>
     )
