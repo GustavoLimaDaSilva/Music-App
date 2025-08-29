@@ -2,10 +2,10 @@ import AlbumInfo from "./album-info"
 import ContentActions from "./content-actions"
 export default function ContentPresentation({ headerContent }) {
 
-    console.log(headerContent)
 
     return (
         <div className="content-header glass">
+            <div className="content-header-info">
             <img src={headerContent.images[0].url} alt={`${headerContent.name}'s image`} className={headerContent.type === 'album' ? 'header-album' : 'header-artist'} />
 
             {headerContent.type === 'album' ?
@@ -21,6 +21,7 @@ export default function ContentPresentation({ headerContent }) {
                     }
                 </div>
             }
+            </div>
             <ContentActions content={headerContent}/>
         </div>
     )
