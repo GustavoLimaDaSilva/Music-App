@@ -1,23 +1,25 @@
 import { Link } from "react-router";
+import { useContext } from "react";
+import {PlayerContext} from "../playerProvider"
+// import { playNext } from "../..";
 
-export default function TrackDropdownOptions({ context, albumId, artistId }) {
+export default function TrackDropdownOptions({ context, item }) {
 
+  const {playNext, setPlayNext} = useContext(PlayerContext)
 
 return (<>
-    <li className="dropdown-item">Add to queue</li>
-    <li className="dropdown-item">Add to Playlist</li>
-    <li className="dropdown-item">Add to liked songs</li>
+    <li className="dropdown-item" onClick={ () => setPlayNext([item, ...playNext])}>Play next</li>
     {context === 'playlists' || !context ?
      <>
-        <Link to={`/albums/${albumId}`}><li className="dropdown-item">Go to Album</li></Link>
-        <Link to={`/artists/${artistId}`}><li className="dropdown-item">Go to Artist</li></Link>
+        <li className="dropdown-item"><Link to={`/albums/${item.album?.id}`}>Go to Album</Link></li>
+        <li className="dropdown-item"><Link to={`/artists/${item.artists?.[0].id}`}>Go to Artist</Link></li>
       </>
       :
       context === 'artists' ?
-        <Link to={`/albums/${albumId}`}><li className="dropdown-item">Go to album</li></Link>
+        <li className="dropdown-item"><Link to={`/albums/${item.album?.id}`}>Go to album</Link></li>
         :
         context === 'albums' &&
-        <Link to={`/artists/${artistId}`}><li className="dropdown-item">Go to Artist</li></Link>
+        <li className="dropdown-item"><Link to={`/artists/${item.artists?.[0].id}`}>Go to Artist</Link></li>
     }
   </>);
 }
