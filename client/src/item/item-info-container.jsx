@@ -1,5 +1,5 @@
 import useActivate from '../hooks/useActivate';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { getPreview, getTopTracks, startTrack } from '../..';
 import { PlayerContext } from '../playerProvider';
 import { AccountContext } from '../App';
@@ -10,7 +10,7 @@ export default function ItemInfoContainer({ item, context }) {
 
     const itemRef = useRef(null)
     const audioRef = useRef(null)
-    const previewRef = useRef(null)
+    const [preview, setPreview] = useState(null)
     const { isReady, isPlaying, setCurrentTrack } = useContext(PlayerContext)
     const { isPremium } = useContext(AccountContext)
     const { userCredentials } = useContext(AuthContext)
@@ -19,31 +19,23 @@ export default function ItemInfoContainer({ item, context }) {
 
     useEffect(() => {
 
-        async function handleClick() {
-            if (isActive) {
+        if (preview && isActive) { audioRef.current.play() }
+        else if (!isActive) { audioRef.current.pause() }
 
-                if (isPremium) {
-                    setToStream([item])
-                    setCurrentTrack(item)
-                }
-                else if (!isPremium) {
-                    previewRef.current = await getPreview(item.name, item.artist.name)
-                    audioRef.current.play()
-                }
-            } else {
-                if (!isPremium) audioRef.current.pause()
-            }
-        }
-
-        handleClick()
-    }, [isActive, isReady, userCredentials.accessToken, isPlaying])
-
+    }, [preview, isActive])
+    
     return (
         <div className="item-info-container" ref={itemRef} onClick={item.type === 'track' ? async () => {
 
-            setIsActive(prev => !prev)
+            if (!isPremium) {
+                setPreview(await getPreview(item.name, item.artists[0].name))
+                setIsActive(prev => !prev)
+            } else {
+                setToStream([item])
+                setCurrentTrack(item)
+            }
         } : null}>
-            <audio src={previewRef.current} ref={audioRef} />
+            <audio src={preview} ref={audioRef} />
             <p className="title">{item.name}</p>
             {context !== 'artists' &&
                 <p className='info inline-mode'>{
