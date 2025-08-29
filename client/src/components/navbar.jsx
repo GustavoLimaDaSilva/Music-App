@@ -2,7 +2,6 @@
 import { Link } from "react-router"
 import { useContext, useEffect, useState } from "react"
 import { getPlaylists } from "../.."
-import Loading from "./loading"
 
 export default function Navbar() {
 
