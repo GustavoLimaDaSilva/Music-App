@@ -7,20 +7,21 @@ export default function AuthProvider({ children }) {
 
     const [userCredentials, setUserCredentials] = useState({})
     const [isLogged, setIsLogged] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
 
     useEffect(() => {
 
         if (userCredentials.accessToken) {
-         
+
             setIsLoading(false)
             return setIsLogged(true)
         }
 
+        setIsLoading(true)
         const query = getQueryParams()
-        query.code ? logIn(userCredentials, setUserCredentials) : refreshToken(userCredentials, setUserCredentials)
 
+        query.code ? logIn(userCredentials, setUserCredentials) : refreshToken(userCredentials, setUserCredentials)
     }, [userCredentials.accessToken])
 
 
@@ -36,10 +37,9 @@ export default function AuthProvider({ children }) {
 async function logIn(userCredentials, setUserCredentials) {
 
     const fetchedToken = await getToken()
-
     if (fetchedToken) {
         setUserCredentials({ ...userCredentials, accessToken: fetchedToken })
-        deleteQueryString()
+        // deleteQueryString()
     }
 }
 

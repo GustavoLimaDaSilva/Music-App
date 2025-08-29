@@ -6,9 +6,9 @@ import { Outlet, useNavigate } from 'react-router';
 import Navbar from './components/navbar'
 import Header from './components/header.jsx';
 import PlayerProvider from './playerProvider.jsx';
-import PlayBar from './components/playBar.jsx';
+import PlayBar from './components/playerBar.jsx';
 import { AuthContext } from './authProvider.jsx';
-import Loading from './components/loading.jsx';
+
 export const AccountContext = createContext(null)
 
 
@@ -19,23 +19,23 @@ function App() {
   const [userInput, setUserInput] = useState('')
   const [isPremium, setIsPremium] = useState(null)
   const query = getQueryParams()
-  const { isLoading, isLogged } = useContext(AuthContext)
+  const { isLoading, isLogged, userCredentials } = useContext(AuthContext)
 
 
   useEffect(() => {
 
-    if (isLoading) return
+    console.log(isLoading)
+    if (!isLoading) return
 
-
-    if (isLogged && location.pathname === '/') {
+    if ((isLogged || location.search) && location.pathname === '/') {
      
       navigate('/Home')
     }
-    else if (!isLogged) {
+    else if (!isLogged && location.pathname === '/') {
 
       navigate('/Login')
     }
-  }, [isLogged])
+  }, [isLogged, isLoading])
 
   useEffect(() => {
 
@@ -58,15 +58,5 @@ function App() {
     </>
   )
 }
-
-
-//clica botão (logar)
-// vai pro spotify
-// volta para site com o código
-// pega o Token
-// abre Home
-// clica para sair
-// apaga toda a informação
-// volta para Login
 
 export default App
