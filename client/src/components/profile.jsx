@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, useContext } from "react"
 import { getProfile, logOut } from "../.."
-import Loading from './loading'
 import { DropdownList } from "./dropdown-list"
 import useActivate from '../hooks/useActivate'
 import { AuthContext } from "../authProvider"
 import { AccountContext } from "../App"
+import { PlayerContext } from "../playerProvider"
+import { useNavigate } from "react-router"
 export default function Profile() {
 
     const [user, setUser] = useState(null)
@@ -12,9 +13,13 @@ export default function Profile() {
     const [isActive, setIsActive] = useActivate(userRef)
     const { userCredentials, setUserCredentials, setIsLogged } = useContext(AuthContext)
     const { setIsPremium } = useContext(AccountContext)
+    const navigate = useNavigate()
+
     useEffect(() => {
 
         async function fetchMe() {
+
+            if (userCredentials.userInfo) return
 
             const profile = await getProfile(userCredentials.accessToken)
 
@@ -24,10 +29,10 @@ export default function Profile() {
         }
 
         fetchMe()
-    }, [])
+    }, [userCredentials.accessToken])
 
     return (<>
-        {user === null ? <Loading /> :
+        {user === null ? '' :
 
             <div className="user relative" ref={userRef} onClick={() => setIsActive(prev => !prev)}>
                 {
@@ -47,7 +52,7 @@ export default function Profile() {
 
                             localStorage.clear()
                             setIsLogged(false)
-                            setAccessToken(null)
+                            navigate('/Login')
                         }
                     }}>Log out</button>
                 </DropdownList>
