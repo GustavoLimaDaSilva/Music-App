@@ -7,6 +7,6 @@ export default defineConfig({
   jsxRuntime: 'classic',
   build: {
     rollupOptions: {
-      external: ['react/jsx-runtime', 'react', 'react-dom', 'react-router']
+      external: ['react/jsx-runtime', 'react', 'react-dom', 'react-router', 'lodash.debounce']
     }}
 })
