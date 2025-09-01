@@ -7,6 +7,6 @@ export default defineConfig({
   jsxRuntime: 'automatic',
   build: {
     rollupOptions: {
-      external: ['react-router', 'lodash.debounce']
+      external: []
     }}
 })

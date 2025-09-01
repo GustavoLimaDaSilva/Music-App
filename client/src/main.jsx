@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, RouterProvider, useLocation } from "react-router";
+import { createBrowserRouter, RouterProvider, useLocation } from "react-router-dom";
 import Home from './components/home';
 import ContentLayoutRoot from './content-layout/content-layout-root'
 import PlaylistContent from './components/playlistContent.jsx';
