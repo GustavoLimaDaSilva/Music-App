@@ -4,9 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  jsxRuntime: 'classic',
+  jsxRuntime: 'automatic',
   build: {
     rollupOptions: {
-      external: ['react/jsx-runtime', 'react', 'react-dom', 'react-router', 'lodash.debounce']
+      external: ['react-router', 'lodash.debounce']
     }}
 })
