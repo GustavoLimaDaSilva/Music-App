@@ -24,7 +24,6 @@ function App() {
 
   useEffect(() => {
 
-    console.log(isLoading)
     if (!isLoading) return
 
     if ((isLogged || location.search) && location.pathname === '/') {
