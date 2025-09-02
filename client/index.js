@@ -1,4 +1,4 @@
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta?.env?.VITE_API_URL || 'http://localhost:3000'
 
 export const safe = (fn) =>
     async (...args) => {
@@ -23,7 +23,6 @@ export async function logIn() {
 export const getToken = safe(async () => {
 
     const query = getQueryParams()
-
     if (query.code) {
         const response = await fetch(`${apiUrl}/auth/getToken/${query.code}/${query.state}`)
         const data = await response.json()
@@ -42,7 +41,7 @@ export async function refreshAccessToken() {
 
     try {
 
-        accessToken = await fetch(`${apiUrl}/auth/refreshToken`, {
+        accessToken = await fetch(`refreshToken`, {
             method: 'POST',
             credentials: 'include'
         })
@@ -74,7 +73,6 @@ export async function logOut() {
         window.location.reload()
         return true
     }
-
 }
 
 
@@ -96,7 +94,7 @@ export const getProfile = safe(async (accessToken) => {
     return data
 })
 
-export const getUserTopItems = safe(async (setTopItems, accessToken, type) => {
+export const getUserTopItems = safe(async (accessToken, type) => {
 
     if (!accessToken) return
 
@@ -111,7 +109,7 @@ export const getUserTopItems = safe(async (setTopItems, accessToken, type) => {
     if (data.error) {
         throw new Error(`${data.error.message} at getUserTopItems`)
     }
-    setTopItems(data)
+    return data
 })
 
 export function getQueryParams() {
