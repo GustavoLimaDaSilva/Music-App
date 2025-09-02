@@ -5,7 +5,7 @@ const crypto = require('crypto').webcrypto
 const token_url = "https://accounts.spotify.com/api/token";
 const client_id = '0287a61f15fb4d6dbb7b45b6f2c6d2f3';
 const client_secret = '3ca4b058063c406094051454001fba5a';
-const redirect_uri = `http://localhost:5173/`
+const redirect_uri = `https://asahimusic.netlify.app/`
 const state = generateRandomString(16)
 
 const router = require('express').Router()
