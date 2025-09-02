@@ -41,7 +41,7 @@ export async function refreshAccessToken() {
 
     try {
 
-        accessToken = await fetch(`refreshToken`, {
+        accessToken = await fetch(`${apiUrl}/auth/refreshToken`, {
             method: 'POST',
             credentials: 'include'
         })
