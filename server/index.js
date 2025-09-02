@@ -13,7 +13,9 @@ app.use(cookieParser())
 
 app.use('/auth', auth)
 
-
+app.get('/', (req, res) => {
+  res.send('Server is online');
+})
 
 app.get('/preview/:song/:artist', async (req, res) => {
 
