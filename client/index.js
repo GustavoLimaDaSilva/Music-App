@@ -1,3 +1,5 @@
+const apiUrl = import.meta.env.VITE_API_URL
+
 export const safe = (fn) =>
     async (...args) => {
 
@@ -13,7 +15,7 @@ export const safe = (fn) =>
 export async function logIn() {
 
 
-    window.location = 'http://localhost:3000/auth/login'
+    window.location = `${apiUrl}/auth/login`
 
 }
 
@@ -23,7 +25,7 @@ export const getToken = safe(async() => {
     const query = getQueryParams()
 
     if (query.code) {
-        const response = await fetch(`api/auth/getToken/${query.code}/${query.state}`)
+        const response = await fetch(`${tokenUrl}/auth/getToken/${query.code}/${query.state}`)
         const data = await response.json()
 
         if (data.error) {
@@ -40,7 +42,7 @@ export async function refreshAccessToken() {
 
     try {
 
-        accessToken = await fetch('/api/auth/refreshToken', {
+        accessToken = await fetch(`${tokenUrl}/auth/refreshToken`, {
             method: 'POST',
             credentials: 'include'
         })
@@ -98,7 +100,7 @@ export async function getTokens() {
 
 export async function logOut() {
 
-    const res = await fetch('/api/auth/logout', {
+    const res = await fetch(`${tokenUrl}/auth/logout`, {
         method: 'POST',
         credentials: "include"
     })
@@ -156,7 +158,7 @@ export const getProfile = safe(async (accessToken) => {
 export async function getAllGenres() {
 
 
-    const res = await fetch('/api/genres')
+    const res = await fetch(`${tokenUrl}/genres`)
 
     const data = await res.json()
 
@@ -364,7 +366,7 @@ export const getPlaylistData = safe(async (playlistId, accessToken) => {
 
 export const getPreview = safe(async (songName, artistName) => {
 
-    const res = await fetch(`/api/preview/${songName}/${artistName}`)
+    const res = await fetch(`${tokenUrl}/preview/${songName}/${artistName}`)
 
     const data = await res.json()
 
