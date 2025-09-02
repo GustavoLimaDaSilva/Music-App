@@ -20,7 +20,7 @@ export async function logIn() {
 }
 
 
-export const getToken = safe(async() => {
+export const getToken = safe(async () => {
 
     const query = getQueryParams()
 
@@ -96,7 +96,23 @@ export const getProfile = safe(async (accessToken) => {
     return data
 })
 
+export const getUserTopItems = safe(async (setTopItems, accessToken, type) => {
 
+    if (!accessToken) return
+
+    const res = await fetch(`https://api.spotify.com/v1/me/top/${type}`, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await res.json()
+
+    if (data.error) {
+        throw new Error(`${data.error.message} at getUserTopItems`)
+    }
+    setTopItems(data)
+})
 
 export function getQueryParams() {
 
@@ -111,7 +127,7 @@ export function deleteQueryString() {
     window.location.search = ''
 }
 
-export const searchItem = safe(async(item, accessToken) => {
+export const searchItem = safe(async (item, accessToken) => {
 
     if (item === undefined || item === null || item === '' || !accessToken) return
 
@@ -124,8 +140,8 @@ export const searchItem = safe(async(item, accessToken) => {
 
     const data = await res.json()
 
-     if (data.error) {
-        
+    if (data.error) {
+
         throw new Error(`${data.error.message} at searchItem`)
     }
 
@@ -351,7 +367,7 @@ export async function startTrack(deviceId, accessToken, track) {
 
     if (!deviceId || !accessToken || !track) return
     const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-        
+
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer ' + accessToken,
@@ -521,7 +537,7 @@ export async function handleSaving(isSaved, accessToken, ids, type) {
         body: JSON.stringify({ ids: ids }),
     });
 
-       const data = await res.json()
+    const data = await res.json()
 
     if (data.error) {
         throw new Error(`${data.error.message} at handleSaving`)
