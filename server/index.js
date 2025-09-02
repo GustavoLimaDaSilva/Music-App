@@ -7,7 +7,7 @@ const redirect_uri = process.env.REDIRECT_URI
 
 
 app.use(cors({
-  origin: redirect_uri,
+  origin: new URL(redirect_uri).origin,
   credentials: true
 }))
 
