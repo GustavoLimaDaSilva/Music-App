@@ -3,9 +3,11 @@ const fs = require('fs')
 const app = require('express')();
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const redirect_uri = process.env.REDIRECT_URI
+
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: redirect_uri,
   credentials: true
 }))
 
