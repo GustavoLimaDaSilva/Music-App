@@ -62,8 +62,8 @@ router.get('/getToken/:code/:state', async (req, res) => {
 
             res.cookie('refresh_token', data.refresh_token, {
                 httpOnly: true,
-                secure: false, //lembrar de mudar para true em produção
-                sameSite: 'Strict',
+                secure: true, 
+                sameSite: 'none',
                 maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dias
                 path: '/'
             })
@@ -111,8 +111,8 @@ router.post('/logout', (req, res) => {
 
     res.clearCookie('refresh_token', {
         httpOnly: true,
-        secure: false, //lembrar de mudar para true em produção
-        sameSite: 'Strict',
+        secure: true, 
+        sameSite: 'none',
         path: '/'
     })
 

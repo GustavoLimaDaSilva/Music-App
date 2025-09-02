@@ -25,7 +25,7 @@ export const getToken = safe(async() => {
     const query = getQueryParams()
 
     if (query.code) {
-        const response = await fetch(`${tokenUrl}/auth/getToken/${query.code}/${query.state}`)
+        const response = await fetch(`${apiUrl}/auth/getToken/${query.code}/${query.state}`)
         const data = await response.json()
 
         if (data.error) {
@@ -42,7 +42,7 @@ export async function refreshAccessToken() {
 
     try {
 
-        accessToken = await fetch(`${tokenUrl}/auth/refreshToken`, {
+        accessToken = await fetch(`${apiUrl}/auth/refreshToken`, {
             method: 'POST',
             credentials: 'include'
         })
@@ -61,46 +61,10 @@ export async function refreshAccessToken() {
 }
 
 
-export async function getTokens() {
-
-    const codeVerifier = localStorage.getItem('codeVerifier')
-
-    if (codeVerifier === null) return
-
-
-    const code = getQueryParams().code
-
-    if (code === null || code === undefined) return
-
-    const payload = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            client_id: clientId,
-            grant_type: 'authorization_code',
-            code,
-            redirect_uri: redirectUri,
-            code_verifier: codeVerifier,
-        }),
-    }
-
-    localStorage.removeItem('codeVerifier')
-
-    const body = await fetch(tokenUrl, payload)
-    const response = await body.json()
-
-
-    return {
-        access_token: response.access_token,
-        refresh_token: response.refresh_token
-    }
-}
 
 export async function logOut() {
 
-    const res = await fetch(`${tokenUrl}/auth/logout`, {
+    const res = await fetch(`${apiUrl}/auth/logout`, {
         method: 'POST',
         credentials: "include"
     })
@@ -111,29 +75,6 @@ export async function logOut() {
         return true
     }
 
-}
-
-async function handleTokensStorage() {
-
-    let tokens;
-
-    try {
-
-        tokens = await getTokens()
-
-    } catch (err) {
-
-        console.error('token fetching failed because:', err)
-    }
-
-
-
-    if (tokens !== undefined && tokens !== null) {
-
-        localStorage.setItem('access_token', tokens.access_token)
-        localStorage.setItem('refresh_token', tokens.refresh_token)
-        return true
-    }
 }
 
 
@@ -155,34 +96,7 @@ export const getProfile = safe(async (accessToken) => {
     return data
 })
 
-export async function getAllGenres() {
 
-
-    const res = await fetch(`${tokenUrl}/genres`)
-
-    const data = await res.json()
-
-    localStorage.setItem('genres', JSON.stringify(data))
-}
-
-export const getUserTopItems = safe(async (accessToken, type) => {
-    if (!accessToken) return
-    
-    
-    const res = await fetch(`https://api.spotify.com/v1/me/top/${type}`, {
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        }
-    })
-    
-    const data = await res.json()
-    
-    if (data.error) {
-        throw new Error(`${data.error.message} at getUserTopItems`)
-    }
-
-    return data
-})
 
 export function getQueryParams() {
 
@@ -366,7 +280,7 @@ export const getPlaylistData = safe(async (playlistId, accessToken) => {
 
 export const getPreview = safe(async (songName, artistName) => {
 
-    const res = await fetch(`${tokenUrl}/preview/${songName}/${artistName}`)
+    const res = await fetch(`${apiUrl}/preview/${songName}/${artistName}`)
 
     const data = await res.json()
 
