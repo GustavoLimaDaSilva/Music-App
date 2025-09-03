@@ -12,21 +12,22 @@ export default function useToStream(tracks = []) {
 
         async function handleStream() {
 
-            if (deviceID && userCredentials.accessToken && toStream.length !== 0) {
+            if (!deviceID || !userCredentials.accessToken || toStream.length === 0) return
 
-                setIsPlaying(true)
-                setCurrentTrack({...toStream[0]})
+            if (toStream.length > 1) {
+
                 setQueue({ list: toStream, offset: 0 })
+            }
+            else {
 
-                if (toStream.length === 1) {
-
-                    const topTracks = await getTopTracks(toStream[0].artists?.[0].id, userCredentials.accessToken)
-                        .then(tracks => tracks.filter(track => track.id !== toStream[0].id))
+                const topTracks = await getTopTracks(toStream[0].artists?.[0].id, userCredentials.accessToken)
+                    .then(tracks => tracks.filter(track => track.id !== toStream[0].id))
 
                     setQueue({ list: [...toStream, ...topTracks], offset: 0 })
                 }
-            }
 
+                setIsPlaying(true)
+                setCurrentTrack({ ...toStream[0] })
         }
         handleStream()
     }, [toStream, isReady, userCredentials.accessToken])
