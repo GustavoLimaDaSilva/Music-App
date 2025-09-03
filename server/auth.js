@@ -28,14 +28,13 @@ router.get('/login', (req, res) => {
 
 })
 
-router.get('/getToken/:code/:state', async (req, res) => {
+router.post('/getToken/:code/:state', async (req, res) => {
 
     const code = req.params.code
     const returned_state = req.params.state
 
     if (returned_state !== state) {
 
-        // res.redirect('http:/localhost:5173/Home')
         console.error('state is null')
         res.status(400).json({ error: "URL states don't match" })
     }
@@ -79,9 +78,8 @@ router.get('/getToken/:code/:state', async (req, res) => {
 })
 
 router.post('/refreshToken', async (req, res) => {
-
     const refresh_token = req.cookies['refresh_token']
-
+    
     if (!refresh_token) {
 
         return res.status(401).json({ error: 'No refresh token available' })
@@ -108,6 +106,8 @@ router.post('/refreshToken', async (req, res) => {
 
 
 router.post('/logout', (req, res) => {
+
+  
 
     res.clearCookie('refresh_token', {
         httpOnly: true,

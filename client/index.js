@@ -24,7 +24,10 @@ export const getToken = safe(async () => {
 
     const query = getQueryParams()
     if (query.code) {
-        const response = await fetch(`${apiUrl}/auth/getToken/${query.code}/${query.state}`)
+        const response = await fetch(`${apiUrl}/auth/getToken/${query.code}/${query.state}`, {
+            method: 'POST',
+            credentials: 'include'
+        })
         const data = await response.json()
 
         if (data.error) {
@@ -52,7 +55,6 @@ export async function refreshAccessToken() {
     } finally {
 
         if (accessToken) {
-
             const data = await accessToken.json()
             return data
         }
@@ -452,7 +454,7 @@ export function setTrackTimer(track, queue, setQueue, playNext, setPlayNext, set
                 setCurrentTrack(playNext[0]);
                 setPlayNext(prev => prev.slice(1));
             } else {
-                setQueue({ list: [...queue.list], offset: queue.offset + 1 })
+                setQueue({ list: queue.list, offset: queue.offset + 1 })
                 setCurrentTrack(queue.list[queue.offset + 1])
             }
         }

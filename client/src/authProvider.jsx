@@ -39,7 +39,6 @@ async function logIn(userCredentials, setUserCredentials) {
     const fetchedToken = await getToken()
     if (fetchedToken) {
         setUserCredentials({ ...userCredentials, accessToken: fetchedToken })
-        // deleteQueryString()
     }
 }
 
@@ -48,7 +47,7 @@ async function refreshToken(userCredentials, setUserCredentials) {
 
     const newToken = await refreshAccessToken()
 
-    if (!newToken.error) {
+    if (newToken) {
         setUserCredentials({ ...userCredentials, accessToken: newToken })
     }
 }
