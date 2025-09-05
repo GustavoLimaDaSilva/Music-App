@@ -15,7 +15,6 @@ export default function SkipNext() {
             if (playNext.length > 0) {
 
                 setCurrentTrack({...playNext[0]});
-                console.log(playNext);
                 setPlayNext(prev => prev.slice(1));
                 setIsPlaying(true)
             } else {
