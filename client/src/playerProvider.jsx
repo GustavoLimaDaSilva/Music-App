@@ -48,7 +48,8 @@ export default function PlayerProvider({ children }) {
 
 
     return (
-        <PlayerContext.Provider value={{ deviceID, isReady, setIsReady, isPlaying, setIsPlaying, queue, setQueue, playNext, setPlayNext, currentTrack, setCurrentTrack, isShuffle, setIsShuffle, triggerShuffle }}>
+
+<PlayerContext.Provider value={{ deviceID, isReady, setIsReady, isPlaying, setIsPlaying, queue, setQueue, playNext, setPlayNext, currentTrack, setCurrentTrack, isShuffle, setIsShuffle, triggerShuffle }}>
             {children}
         </PlayerContext.Provider>
     )
