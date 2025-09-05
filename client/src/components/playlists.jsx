@@ -15,7 +15,6 @@ export function Playlists() {
         fetchPlaylists(playlists, setPlaylists, userCredentials)
     }, [])
     
-    console.log(playlists)
     return (
         <div className="content-wrapper glass">
             {playlists.length === 0 ?

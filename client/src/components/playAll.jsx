@@ -8,7 +8,6 @@ export default function ContentButton({ tracks }) {
     <button className="content-actions-btn" onClick={() => {
 
       if (tracks) {
-       
         setToStream(tracks)
       }
     }}>Play All</button>
