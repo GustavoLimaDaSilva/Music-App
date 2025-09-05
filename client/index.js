@@ -454,7 +454,7 @@ export function setTrackTimer(track, queue, setQueue, playNext, setPlayNext, set
                 setCurrentTrack(playNext[0]);
                 setPlayNext(prev => prev.slice(1));
             } else {
-                setQueue({ list: queue.list, offset: queue.offset + 1 })
+                setQueue({ list: [...queue.list], offset: queue.offset + 1 })
                 setCurrentTrack(queue.list[queue.offset + 1])
             }
         }
