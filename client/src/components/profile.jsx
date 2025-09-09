@@ -3,16 +3,16 @@ import { getProfile, logOut } from "../.."
 import { DropdownList } from "./dropdown-list"
 import useActivate from '../hooks/useActivate'
 import { AuthContext } from "../authProvider"
-import { AccountContext } from "../App"
-import { PlayerContext } from "../playerProvider"
 import { useNavigate } from "react-router"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+
 export default function Profile() {
 
     const [user, setUser] = useState(null)
     const userRef = useRef(null)
     const [isActive, setIsActive] = useActivate(userRef)
     const { userCredentials, setUserCredentials, setIsLogged } = useContext(AuthContext)
-    const { setIsPremium } = useContext(AccountContext)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -23,7 +23,6 @@ export default function Profile() {
 
             const profile = await getProfile(userCredentials.accessToken)
 
-            setIsPremium(profile.product === 'premium')
             setUser(profile)
             setUserCredentials({ ...userCredentials, userInfo: profile })
         }
@@ -32,7 +31,7 @@ export default function Profile() {
     }, [userCredentials.accessToken])
 
     return (<>
-        {user === null ? '' :
+        {!user ? '' :
 
             <div className="user relative" ref={userRef} onClick={() => setIsActive(prev => !prev)}>
                 {
@@ -54,7 +53,7 @@ export default function Profile() {
                             setIsLogged(false)
                             navigate('/Login')
                         }
-                    }}>Log out</button>
+                    }}><FontAwesomeIcon icon={faRightFromBracket}/>Log out</button>
                 </DropdownList>
             </div>
         }

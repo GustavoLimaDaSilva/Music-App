@@ -2,7 +2,6 @@ import useActivate from '../hooks/useActivate';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { getPreview, getTopTracks, startTrack } from '../..';
 import { PlayerContext } from '../playerProvider';
-import { AccountContext } from '../App';
 import { AuthContext } from '../authProvider';
 import useStream from '../hooks/useStream';
 
@@ -12,7 +11,6 @@ export default function ItemInfoContainer({ item, context }) {
     const audioRef = useRef(null)
     const [preview, setPreview] = useState(null)
     const { isReady, isPlaying, setCurrentTrack } = useContext(PlayerContext)
-    const { isPremium } = useContext(AccountContext)
     const { userCredentials } = useContext(AuthContext)
     const [isActive, setIsActive] = useActivate(itemRef)
     const [ToStream, setToStream] = useStream()
@@ -27,7 +25,7 @@ export default function ItemInfoContainer({ item, context }) {
     return (
         <div className="item-info-container" ref={itemRef} onClick={item.type === 'track' ? async () => {
 
-            if (!isPremium) {
+            if (userCredentials.userInfo?.product !== 'premium') {
                 setPreview(await getPreview(item.name, item.artists[0].name))
                 setIsActive(prev => !prev)
             } else {
