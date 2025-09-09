@@ -10,7 +10,7 @@ import Loading from "../components/spinner";
 import LoaderState from "../components/loaderState";
 
 export default function ContentLayoutRoot() {
-
+    
     const location = useLocation()
     const { userCredentials } = useContext(AuthContext)
     const [content, setContent] = useState(undefined)

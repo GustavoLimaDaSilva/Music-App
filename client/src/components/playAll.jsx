@@ -1,16 +1,18 @@
-import useStream from "../hooks/useStream";
 
+import { AuthContext } from "../authProvider";
+import { StreamContext } from "../App";
+import { useContext } from "react";
 export default function ContentButton({ tracks }) {
 
-  const [toStream, setToStream] = useStream()
-
-  return (
+  const {toStream, setToStream} = useContext(StreamContext)
+  const { userCredentials } = useContext(AuthContext)
+  return (<>
     <button className="content-actions-btn" onClick={() => {
 
-      if (tracks) {
-        setToStream(tracks)
-      }
+      setToStream(tracks)
+
     }}>Play All</button>
-  );
+  </>
+  )
 }
 
