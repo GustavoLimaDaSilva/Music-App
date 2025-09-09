@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { useContext } from "react";
 import {PlayerContext} from "../playerProvider"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCompactDisc, faUser,  faList, faAdd} from '@fortawesome/free-solid-svg-icons';
+import { faCompactDisc, faUser,  faList} from '@fortawesome/free-solid-svg-icons';
 
 export default function TrackDropdownOptions({ context, item }) {
 

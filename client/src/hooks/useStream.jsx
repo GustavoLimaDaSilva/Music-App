@@ -1,19 +1,18 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import { PlayerContext } from '../playerProvider';
 import { AuthContext } from '../authProvider';
-import { getTopTracks, randomize } from "../..";
+import { getTopTracks} from "../..";
 
 export default function useToStream(tracks = []) {
 
     const [toStream, setToStream] = useState(tracks)
     const { userCredentials } = useContext(AuthContext)
-    const { isReady, deviceID, setIsPlaying, queue, setQueue, setCurrentTrack, isShuffle, setIsShuffle, triggerShuffle } = useContext(PlayerContext)
+    const { isReady, deviceID, setIsPlaying, setQueue, setCurrentTrack, isShuffle, triggerShuffle } = useContext(PlayerContext)
    
     useEffect(() => {
         
         async function handleStream() {
             
-            console.log(deviceID)
             if (!deviceID || !userCredentials.accessToken || toStream.length === 0) return
 
             if (toStream.length > 1) {
