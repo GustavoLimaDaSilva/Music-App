@@ -10,6 +10,7 @@
   --responsive-font: clamp(.6rem, 2vw - 1rem, 1rem);
   --contrast-clr: #353952;
   --menu-icon-size: clamp(1rem, 3vw, 1.9rem);
+  --dropdown-font-size: clamp(.6rem, .8vw, 1rem);
   --progress-width: 0;
   --player-border-radius: 20px;
   --list-height: 560px
@@ -696,7 +697,7 @@ li:last-of-type {
   right: 15px;
   bottom: 35px;
   position: absolute;
-  font-size: clamp(.6rem, .8vw, 1rem);
+  font-size: var(--dropdown-font-size);
   width: clamp(100px, 15vw, 18vw);
   display: none;
   padding-inline: 0px;
@@ -726,7 +727,7 @@ li:last-of-type {
 
 .dropdown-item {
   z-index: 10;
-  padding-block: .3rem;
+  padding-block: .5rem;
   width: 100%;
   text-wrap: nowrap;
   text-align: left;
@@ -736,6 +737,8 @@ li:last-of-type {
 
 .dropdown-svg {
   margin-inline: 3px;
+  max-width: var(--dropdown-font-size);
+  max-height: var(--dropdown-font-size);
 }
 
 .dropdown-item a {
@@ -999,7 +1002,7 @@ h3 {
 }
 
 .full-screen .player-additional-tools .dropdown-menu {
-  bottom: -80px;
+  bottom: -105px;
 }
 
 .full-screen svg {
