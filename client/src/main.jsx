@@ -12,6 +12,7 @@ import AuthProvider from './authProvider.jsx';
 import App from './App';
 import { Playlists } from './components/playlists.jsx';
 import Login from './components/login.jsx';
+import PlayerProvider from './playerProvider.jsx';
 
 const router = createBrowserRouter([
   {
@@ -52,7 +53,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+      <PlayerProvider>
       <RouterProvider router={router} />
+    </PlayerProvider>
     </AuthProvider>
   </StrictMode>
 );
