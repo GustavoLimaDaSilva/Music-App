@@ -3,8 +3,8 @@ const { stat } = require('fs');
 
 
 const crypto = require('crypto').webcrypto
-const client_id = process.env.CLIENT_ID;
-const client_secret = process.env.CLIENT_SECRET;
+const client_id = process.env.CLIENT_ID || '0287a61f15fb4d6dbb7b45b6f2c6d2f3';
+const client_secret = process.env.CLIENT_SECRET || '3ca4b058063c406094051454001fba5a';
 const redirect_uri = process.env.REDIRECT_URI || 'http://localhost:5173/';
 const state = generateRandomString(16)
 

@@ -15,7 +15,7 @@ import useScroll from "../hooks/useScroll";
 import useMobile from "../hooks/useMobile";
 import LoaderState from "./loaderState";
 
-export default function UserTopItems({ type, title }) {
+export default function UserTopItems({ type, title, setHasContent }) {
 
 
     const { userCredentials } = useContext(AuthContext)
@@ -27,9 +27,12 @@ export default function UserTopItems({ type, title }) {
     useEffect(() => {
 
 
+       if (!topItems) fetchTopItems(setTopItems, userCredentials.accessToken, type)
+    
+        if(topItems?.length === 0) setHasContent(false)
+    }, [userCredentials.accessToken, topItems])
 
-        fetchTopItems(setTopItems, userCredentials.accessToken, type)
-    }, [userCredentials.accessToken])
+
 
     return (
         <>
@@ -46,14 +49,14 @@ export default function UserTopItems({ type, title }) {
                 {topItems === undefined ?
                     <LoaderState callback={() => fetchTopItems(setTopItems, userCredentials.accessToken, type)} />
                     :
-                    topItems.items.map(item => {
+                    topItems.map(item => {
 
                         return <div key={item.id} className="card">
                             {type === 'tracks' ? <TrackCard item={item} /> : <CardContent name={item.name} imageUrl={item.images[0].url} followers={item.followers.total} type={item.type} id={item.id} />}
                         </div>
                     }
                     )}
-                {!isMobile && containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth ?
+                {!isMobile && containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth || scroll === 0?
                     <button className="not-a-button  right-arrow" onClick={() => {
                         containerRef.current?.scrollBy({ left: 400, behavior: "smooth" })
                     }}>
@@ -69,5 +72,5 @@ export default function UserTopItems({ type, title }) {
 async function fetchTopItems(setTopItems, accessToken, type) {
 
     const res = await getUserTopItems(accessToken, type)
-    setTopItems(res)
+    setTopItems(res?.items)
 }

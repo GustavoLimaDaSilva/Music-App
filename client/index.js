@@ -558,3 +558,18 @@ export function randomize(queue) {
     }
     return copy
 }
+
+export function totalDuration(tracks) {
+
+    const t = tracks.reduce((acc, curr) => 
+
+        acc += curr.duration_ms
+
+    , 0)
+    const inSecs = convertToSecs(t)
+    
+if (inSecs > 3600) {
+    return `1 hour and ${parseInt((inSecs - 3600) / 60)} minutes`
+}
+return `${parseInt(inSecs / 60)} minutes`
+}

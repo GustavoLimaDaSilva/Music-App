@@ -7,7 +7,7 @@ const redirect_uri = process.env.REDIRECT_URI
 
 
 app.use(cors({
-  origin: new URL(redirect_uri).origin,
+  origin: 'http://localhost:5173',
   credentials: true
 }))
 
