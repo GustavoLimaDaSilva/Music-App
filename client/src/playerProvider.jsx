@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState, useContext, useRef } from "react";
-import { AccountContext } from './App'
 import { AuthContext } from "./authProvider";
 import { createNewPlayer, startTrack } from "..";
 import useShuffle from "./hooks/useShuffle";
@@ -10,7 +9,6 @@ export default function PlayerProvider({ children }) {
 
     const { userCredentials } = useContext(AuthContext)
     const accessToken = userCredentials.accessToken
-    const { isPremium } = useContext(AccountContext)
 
     const [player, setPlayer] = useState(null)
     const [isReady, setIsReady] = useState(false)
@@ -25,12 +23,11 @@ export default function PlayerProvider({ children }) {
 
     useEffect(() => {
 
-        if (!accessToken || !isPremium) return
+        if (!accessToken || userCredentials.userInfo?.product !== 'premium') return
 
         if (!deviceID) createNewPlayer(accessToken, setIsReady, setPlayer, setDeviceID)
 
-
-    }, [accessToken, isPremium, deviceID])
+        }, [userCredentials, deviceID])
 
     useEffect(() => {
 
