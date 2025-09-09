@@ -344,6 +344,7 @@ li {
 .searchbar {
   width: 100%;
   padding-block: .8rem;
+  padding-left: 5px;
   font-size: 16px;
   border-radius: 25px;
   border: none;
