@@ -16,7 +16,7 @@ export default function LoaderState({ callback }) {
     return (
         <>
             {retry ?
-                <ErrorToast callback={callback} setRetry={setRetry}/>
+                <ErrorToast message='Apologies, we are facing some issues now.' callback={callback} setRetry={setRetry}/>
                 :
                 <Spinner />
             }
