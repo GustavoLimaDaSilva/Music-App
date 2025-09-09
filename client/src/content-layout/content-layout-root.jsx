@@ -1,12 +1,9 @@
 import ContentPresentation from "./content-presentation";
-import ContentActions from "./content-actions";
 import ContentList from './content-list';
-import contentAdapter from '../../content-adapter';
 import { useEffect, useContext, useState } from "react";
 import { getContent } from "../..";
-import { useLocation, useOutletContext } from "react-router";
+import { useLocation} from "react-router";
 import { AuthContext } from '../authProvider'
-import Loading from "../components/spinner";
 import LoaderState from "../components/loaderState";
 
 export default function ContentLayoutRoot() {
