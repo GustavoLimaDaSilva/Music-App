@@ -56,7 +56,7 @@ export default function UserTopItems({ type, title, setHasContent }) {
                         </div>
                     }
                     )}
-                {!isMobile && containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth || scroll === 0?
+                {!isMobile && (containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth || scroll === 0)?
                     <button className="not-a-button  right-arrow" onClick={() => {
                         containerRef.current?.scrollBy({ left: 400, behavior: "smooth" })
                     }}>
