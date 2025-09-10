@@ -292,12 +292,13 @@ li {
   width: fit-content 
 }
 
-.navlink:hover {
-  color:#39FF14
+.navlink:hover span{
+  color:#39FF14;
+  transition: color .3s ease-in-out;
 }
 
 .navlink.active {
-  border-bottom: #dddddfb4;
+  border-bottom: #dbe0e6cf 3px solid;
 }
 
 .nav .btn {
