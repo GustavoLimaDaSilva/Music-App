@@ -6,13 +6,13 @@ export default function Navbar() {
 
     return (
         <nav className="nav glass" >
-            <NavLink to={'/Home'}>
+            <NavLink to={'/Home'} className={({isActive}) => isActive ? "navlink active" : "navlink"}>
                 <span className="material-symbols-outlined">
                     home
                 </span>
             </NavLink>
-            <NavLink to={'/playlists'}>
-                <span className="material-symbols-outlined">
+            <NavLink to={'/playlists'} className={({isActive}) => isActive ? "navlink active" : "navlink"}>
+                <span className="material-symbols-outlined" >
                     library_music
                 </span>
             </NavLink>

@@ -287,11 +287,18 @@ li {
   color: var(--secondary-color)
 }
 
-.nav a {
-  margin: 1.5rem;
-  width: fit-content
+.navlink {
+ margin: 1.5rem;
+  width: fit-content 
 }
 
+.navlink:hover {
+  color:#39FF14
+}
+
+.navlink.active {
+  border-bottom: #dddddfb4;
+}
 
 .nav .btn {
   padding: 0px;
