@@ -29,9 +29,8 @@ export default function UserTopItems({ type, title, setHasContent }) {
 
     useEffect(() => {
 
-
         if (!topItems) fetchTopItems(setTopItems, userCredentials.accessToken, type)
-
+        
         if (topItems?.length === 0) setHasContent(false)
     }, [userCredentials.accessToken, topItems])
 
