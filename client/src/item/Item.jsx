@@ -3,7 +3,7 @@ import TrackDropdownOptions from '../components/track-dropdown-options';
 import ItemInfoContainer from './item-info-container';
 import { Link } from 'react-router';
 
-export default function Item({ item, context }) {
+export default function Item({ item, context, isActive, onClick }) {
 
     return (
         <li className="item glass">
@@ -16,7 +16,8 @@ export default function Item({ item, context }) {
                 <ItemInfoContainer item={item} context={context} />
             </Link>
                 :
-                <ItemInfoContainer item={item} context={context} />
+                <ItemInfoContainer item={item} context={context} isActive={isActive}
+                    onClick={onClick}/>
             }
             {item.type === 'track' &&
 

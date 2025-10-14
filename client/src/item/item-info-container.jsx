@@ -1,39 +1,22 @@
-import useActivate from '../hooks/useActivate';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { getPreview, getTopTracks, startTrack } from '../..';
 import { PlayerContext } from '../playerProvider';
 import { AuthContext } from '../authProvider';
 import useStream from '../hooks/useStream';
+import usePreview from '../hooks/usePreview';
 
-export default function ItemInfoContainer({ item, context }) {
+export default function ItemInfoContainer({ item, context, isActive, onClick }) {
 
-    const itemRef = useRef(null)
     const audioRef = useRef(null)
-    const [preview, setPreview] = useState(null)
-    const { isReady, isPlaying, setCurrentTrack } = useContext(PlayerContext)
     const { userCredentials } = useContext(AuthContext)
-    const [isActive, setIsActive] = useActivate(itemRef)
     const [ToStream, setToStream] = useStream()
+    const [preview, setPreview] = usePreview(audioRef, isActive, item)
 
-    useEffect(() => {
-
-        if (preview && isActive) { audioRef.current.play() }
-        else if (!isActive) { audioRef.current.pause() }
-
-    }, [preview, isActive])
-    
     return (
-        <div className="item-info-container" ref={itemRef} onClick={item.type === 'track' ? async () => {
+        <div className="item-info-container" data-track-id={item.id} onClick={item.type === 'track' ? async () => {
 
-            if (userCredentials.userInfo?.product !== 'premium') {
-                setPreview(await getPreview(item.name, item.artists[0].name))
-                setIsActive(prev => !prev)
-            } else {
-                setToStream([item])
-                setCurrentTrack(item)
-            }
+            userCredentials.userInfo?.product !== 'premium' ? onClick() : setToStream([item])
         } : null}>
-            <audio src={preview} ref={audioRef} />
+            <audio ref={audioRef} />
             <p className="title">{item.name}</p>
             {context !== 'artists' &&
                 <p className='info inline-mode'>{
