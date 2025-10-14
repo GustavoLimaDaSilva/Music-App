@@ -14,6 +14,7 @@ import ScrollArrow from "./scroll-arrow";
 import useScroll from "../hooks/useScroll";
 import useMobile from "../hooks/useMobile";
 import LoaderState from "./loaderState";
+import useActivateTrack from "../hooks/useActivateTrack";
 
 export default function UserTopItems({ type, title, setHasContent }) {
 
@@ -23,13 +24,15 @@ export default function UserTopItems({ type, title, setHasContent }) {
     const containerRef = useRef(null)
     const [scroll, setScroll] = useScroll(containerRef.current)
     const [isMobile, setIsMobile] = useMobile()
+    const { activeTrackId, toggleTrack } = useActivateTrack()
+
 
     useEffect(() => {
 
 
-       if (!topItems) fetchTopItems(setTopItems, userCredentials.accessToken, type)
-    
-        if(topItems?.length === 0) setHasContent(false)
+        if (!topItems) fetchTopItems(setTopItems, userCredentials.accessToken, type)
+
+        if (topItems?.length === 0) setHasContent(false)
     }, [userCredentials.accessToken, topItems])
 
 
@@ -39,10 +42,10 @@ export default function UserTopItems({ type, title, setHasContent }) {
             <h2 className="content-title">{title}</h2>
             <div className={type === 'tracks' ? "row-elements light-background" : 'row-elements'} ref={containerRef}>
                 {!isMobile && scroll != 0 ?
-                <button className="not-a-button" onClick={() => {
+                    <button className="not-a-button" onClick={() => {
                         containerRef.current?.scrollBy({ left: -400, behavior: "smooth" })
                     }}>
-                    <FontAwesomeIcon icon={faAngleLeft} className='scroll-arrow'  />
+                        <FontAwesomeIcon icon={faAngleLeft} className='scroll-arrow' />
                     </button>
                     : null
                 }
@@ -52,11 +55,13 @@ export default function UserTopItems({ type, title, setHasContent }) {
                     topItems.map(item => {
 
                         return <div key={item.id} className="card">
-                            {type === 'tracks' ? <TrackCard item={item} /> : <CardContent name={item.name} imageUrl={item.images[0].url} followers={item.followers.total} type={item.type} id={item.id} />}
+                            {type === 'tracks' ? <TrackCard item={item} isActive={activeTrackId === item.id}
+                                onClick={() => toggleTrack(item.id)} />
+                                : <CardContent name={item.name} imageUrl={item.images[0].url} followers={item.followers.total} type={item.type} id={item.id} />}
                         </div>
                     }
                     )}
-                {!isMobile && (containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth || scroll === 0)?
+                {!isMobile && (containerRef.current?.clientWidth + scroll < containerRef.current?.scrollWidth || scroll === 0) ?
                     <button className="not-a-button  right-arrow" onClick={() => {
                         containerRef.current?.scrollBy({ left: 400, behavior: "smooth" })
                     }}>
