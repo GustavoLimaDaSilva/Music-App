@@ -10,7 +10,7 @@
   --responsive-font: clamp(.6rem, 2vw - 1rem, 1rem);
   --contrast-clr: #353952;
   --menu-icon-size: clamp(1rem, 3vw, 1.9rem);
-  --dropdown-font-size: clamp(.6rem, .8vw, 1rem);
+  --dropdown-font-size: clamp(6.3px, .8vw, 1rem);
   --progress-width: 0;
   --player-border-radius: 20px;
   --list-height: 560px
@@ -121,7 +121,7 @@ button {
 
 
 @keyframes hue {
-  
+
   0% {
     box-shadow: 0px;
   }
@@ -288,12 +288,12 @@ li {
 }
 
 .navlink {
- margin: 1.5rem;
-  width: fit-content 
+  margin: 1.5rem;
+  width: fit-content
 }
 
-.navlink:hover span{
-  color:#39FF14;
+.navlink:hover span {
+  color: #39FF14;
   transition: color .3s ease-in-out;
 }
 
@@ -524,11 +524,21 @@ a {
   text-overflow: ellipsis;
 }
 
+.card-title:hover {
+  text-decoration: underline;
+}
+
+
 .card-subtitle {
 
   font-size: calc(var(--responsive-font) - 2px);
 }
 
+.card:has(audio) .card-subtitle:hover {
+
+  text-decoration: underline;
+  color: rgb(106, 106, 106)
+}
 
 .card-img {
   width: 100%;
@@ -538,6 +548,11 @@ a {
   /* keeps it square */
   object-fit: cover;
   border-radius: 10px;
+  transition: .2s linear transform;
+}
+
+.card:hover .profile {
+ transform: scale(1.1);
 }
 
 .scroll-arrow {
@@ -695,19 +710,20 @@ li:last-of-type {
 }
 
 .content-wrapper li:first-of-type .dropdown-menu {
-  bottom: -30px;
-  right: 40px;
+  transform: translateY(101%);
+  bottom: 40px;
+  /* right: 20px; */
   background-color: gray;
 }
 
 
 .dropdown-menu {
   background-color: gray;
-  right: 15px;
-  bottom: 40px;
+  right: 20px;
+  bottom: 20px;
   position: absolute;
   font-size: var(--dropdown-font-size);
-  width: clamp(100px, 15vw, 18vw);
+  width: clamp(90px, 15vw, 18vw);
   display: none;
   padding-inline: 0px;
   z-index: 10
@@ -736,7 +752,7 @@ li:last-of-type {
 
 .dropdown-item {
   z-index: 10;
-  padding-block: .5rem;
+  padding-block: .4rem;
   width: 100%;
   text-wrap: nowrap;
   text-align: left;
@@ -1033,7 +1049,7 @@ h3 {
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
-animation: spin 1.3s linear forwards, hue 2s ease-in-out 1.3s forwards;
+  animation: spin 1.3s linear forwards, hue 2s ease-in-out 1.3s forwards;
 }
 
 .player-actions-bar {
