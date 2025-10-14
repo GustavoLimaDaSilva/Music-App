@@ -132,7 +132,7 @@ export const searchItem = safe(async (item, accessToken) => {
     if (item === undefined || item === null || item === '' || !accessToken) return
 
 
-    const res = await fetch(`https://api.spotify.com/v1/search?q=${item}&type=track,album,artist,playlist`, {
+    const res = await fetch(`https://api.spotify.com/v1/search?q=${item}&type=track,album,artist,playlist&limit=5`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
@@ -303,6 +303,7 @@ export const getPreview = safe(async (songName, artistName) => {
     if (data.error) {
         throw new Error(`${data.error.message} at getPreview`)
     }
+
     return data.data[0].preview
 })
 
