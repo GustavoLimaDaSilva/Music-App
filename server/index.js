@@ -26,7 +26,7 @@ app.get('/preview/:song/:artist', async (req, res) => {
 
   try {
 
-    const response = await fetch(`https://api.deezer.com/search?q=${song}%20${artist}&order=RANKING&limit=1`)
+    const response = await fetch(`https://api.deezer.com/search?q=${song.replace(/ /g, '%20')}%20${artist.replace(/ /g, '%20')}&order=RANKING&limit=1`)
 
     const data = await response.json()
     res.json(data);
