@@ -148,9 +148,8 @@ button {
 }
 
 .toast {
-  position: absolute;
+  position: fixed;
   background-color: rgb(73, 73, 73);
-  inset: 0;
   padding-inline: 10px;
   border-radius: 10px;
   width: max-content;
@@ -158,13 +157,14 @@ button {
   margin: auto;
   color: white;
   font-weight: lighter;
-  font-size: clamp(.7rem, 1vw, 1.5vw);
+  font-size: clamp(7.5px, 1vw, 1.5vw);
+  opacity: 0;
+  transition: opacity .5s ease-in-out;
 }
 
 .bottom-toast {
   z-index: 99;
-  top: 85vh;
-  opacity: 0;
+  bottom: 10vh;
 }
 
 .toast :where(button, a) {
@@ -175,10 +175,11 @@ button {
   font-weight: bold;
 }
 
+
 .toast-fade {
   opacity: 1;
   animation: fade linear 1s forwards;
-  animation-delay: 2s;
+  animation-delay: 6s;
 }
 
 .this-is-empty {
@@ -453,7 +454,6 @@ li {
   height: fit-content;
   overflow-x: scroll;
   border-radius: 10px;
-  position: relative;
 }
 
 .content-title {
@@ -720,7 +720,7 @@ li:last-of-type {
 
 .dropdown-menu {
   background-color: gray;
-  right: 20px;
+  right: 40px;
   bottom: 20px;
   position: absolute;
   font-size: var(--dropdown-font-size);
