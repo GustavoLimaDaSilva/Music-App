@@ -2,7 +2,6 @@ import { totalDuration } from "../.."
 
 export default function AlbumInfo({ info }) {
 
-console.log(info)
     return (
 
         <div>
