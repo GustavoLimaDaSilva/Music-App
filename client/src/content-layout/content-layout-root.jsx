@@ -35,6 +35,9 @@ export default function ContentLayoutRoot() {
 }
 
 async function fetchContent(setContent, accessToken) {
+
+    if (!accessToken) return
+
     const path = location.pathname.split('/')
     const type = path[1]
     const id = path[2]
