@@ -4,6 +4,7 @@ import useStream from "../hooks/useStream";
 import { useState, useRef, useContext } from "react";
 import usePreview from "../hooks/usePreview";
 import { AuthContext } from '../authProvider';
+import { AppContext } from "../App.jsx";
 
 export default function trackCard({ item, onClick, isActive }) {
 
@@ -12,7 +13,8 @@ export default function trackCard({ item, onClick, isActive }) {
     const { userCredentials } = useContext(AuthContext)
     const [isMobile, setIsMobile] = useMobile()
     const [toStream, setToStream] = useStream()
-    const [preview, setPreview] = usePreview(audioRef, isActive, item)
+    const {setToastProps} = useContext(AppContext)
+    const [preview, setPreview] = usePreview(audioRef, isActive, item, setToastProps)
 
 
     return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Spinner from "./spinner";
-import ErrorToast from "./errorToast";
+import Toast from "./Toast";
 
 export default function LoaderState({ callback }) {
 
@@ -16,7 +16,10 @@ export default function LoaderState({ callback }) {
     return (
         <>
             {retry ?
-                <ErrorToast message='Apologies, we are facing some issues now.' callback={callback} setRetry={setRetry}/>
+                <Toast text='Apologies, we are facing some issues now.' callback={() => {
+                    callback()
+                    setRetry(prev => !prev)
+                }} />
                 :
                 <Spinner />
             }

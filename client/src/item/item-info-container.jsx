@@ -3,13 +3,15 @@ import { PlayerContext } from '../playerProvider';
 import { AuthContext } from '../authProvider';
 import useStream from '../hooks/useStream';
 import usePreview from '../hooks/usePreview';
+import { AppContext } from '../App';
 
 export default function ItemInfoContainer({ item, context, isActive, onClick }) {
 
     const audioRef = useRef(null)
     const { userCredentials } = useContext(AuthContext)
     const [ToStream, setToStream] = useStream()
-    const [preview, setPreview] = usePreview(audioRef, isActive, item)
+    const { setToastProps } = useContext(AppContext)
+    const [preview, setPreview] = usePreview(audioRef, isActive, item, setToastProps)
 
     return (
         <div className="item-info-container" data-track-id={item.id} onClick={item.type === 'track' ? async () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getPreview } from "../.."
-export default function usePreview(audioRef, isActive, track) {
+export default function usePreview(audioRef, isActive, track, setToastProps) {
     
     const [preview, setPreview] = useState(null)
     
@@ -19,7 +19,7 @@ useEffect(() => {
 
   if (isActive) {
     
-    if(!preview) fetchPreview(track, setPreview);
+    if(!preview) fetchPreview(track, setPreview, setToastProps);
       audioRef.current.src = preview; 
       audioRef.current.play();
     
@@ -33,8 +33,9 @@ useEffect(() => {
   return [preview, setPreview];
 }
 
-async function fetchPreview(track, setPreview) {
+async function fetchPreview(track, setPreview, setToastProps) {
 
   const data = await getPreview(track.name, track.artists[0].name);
-  setPreview( data );
+
+  data ? setPreview( data ) : setToastProps({text: "We couldn't find any preview for this track."})
 }

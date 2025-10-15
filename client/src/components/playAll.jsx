@@ -1,15 +1,18 @@
 
 import { AuthContext } from "../authProvider";
-import { StreamContext } from "../App";
+import { AppContext } from "../App";
 import { useContext } from "react";
+import useToStream from "../hooks/useStream";
 export default function ContentButton({ tracks }) {
 
-  const {toStream, setToStream} = useContext(StreamContext)
+  const { toStream, setToStream } = useToStream()
   const { userCredentials } = useContext(AuthContext)
+  const { setToastProps } = useContext(AppContext)
+
   return (<>
     <button className="content-actions-btn" onClick={() => {
 
-      setToStream(tracks)
+      userCredentials.userInfo?.product !== 'premium' ? setToastProps({text: "This action requires a premium account."}) : setToStream([tracks])
 
     }}>Play All</button>
   </>
