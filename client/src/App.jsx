@@ -25,13 +25,13 @@ function App() {
 
     if (isLoading) return
 
-    if (!isLogged || searchParams.get('error') || location.pathname === '/') {
-
-      navigate('/Login')
-    }
-    else if (isLogged && location.pathname === '/' && searchParams.get('code')) {
+    if (isLogged && location.pathname === '/' && searchParams.get('code')) {
 
       navigate('/Home')
+    }
+    else if (!isLogged || searchParams.get('error') || location.pathname === '/') {
+
+      navigate('/Login')
     }
   }, [isLogged, isLoading])
 
@@ -47,8 +47,8 @@ function App() {
         <Navbar />
         <AppContext.Provider value={{ toStream, setToStream, toastProps, setToastProps }}>
           <Outlet context={userInput} />
-          {Object.keys(toastProps).length > 0 &&
-            <Toast text={toastProps.text} callback={toastProps.callback} setToastProps={setToastProps} />
+          {Object.keys(toastProps).length > 0 && 
+            <Toast text={toastProps.text} callback={toastProps.callback} setToastProps={setToastProps}/>
           }
         </AppContext.Provider>
       </main>
