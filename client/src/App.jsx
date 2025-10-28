@@ -23,7 +23,12 @@ function App() {
 
   useEffect(() => {
 
-    if (isLoading) return
+    if (isLoading && location.pathname === '/') {
+      navigate('/Login')
+      return
+    } else if (isLoading) {
+      return
+    }
 
     if (isLogged && location.pathname === '/' && searchParams.get('code')) {
 
@@ -47,8 +52,8 @@ function App() {
         <Navbar />
         <AppContext.Provider value={{ toStream, setToStream, toastProps, setToastProps }}>
           <Outlet context={userInput} />
-          {Object.keys(toastProps).length > 0 && 
-            <Toast text={toastProps.text} callback={toastProps.callback} setToastProps={setToastProps}/>
+          {Object.keys(toastProps).length > 0 &&
+            <Toast text={toastProps.text} callback={toastProps.callback} setToastProps={setToastProps} />
           }
         </AppContext.Provider>
       </main>
