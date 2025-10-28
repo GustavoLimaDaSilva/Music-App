@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
 
-    if (isLoading && location.pathname === '/' && searchParams.get('code')) {
+    if (isLoading && location.pathname === '/' && !searchParams) {
       navigate('/Login')
       return
     } else if (isLoading) {
