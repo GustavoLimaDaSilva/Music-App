@@ -122,10 +122,6 @@ export function getQueryParams() {
 
 }
 
-export function deleteQueryString() {
-
-    window.location.search = ''
-}
 
 export const searchItem = safe(async (item, accessToken) => {
 
@@ -562,15 +558,15 @@ export function randomize(queue) {
 
 export function totalDuration(tracks) {
 
-    const t = tracks.reduce((acc, curr) => 
+    const t = tracks.reduce((acc, curr) =>
 
         acc += curr.duration_ms
 
-    , 0)
+        , 0)
     const inSecs = convertToSecs(t)
-    
-if (inSecs > 3600) {
-    return `1 hour and ${parseInt((inSecs - 3600) / 60)} minutes`
-}
-return `${parseInt(inSecs / 60)} minutes`
+
+    if (inSecs > 3600) {
+        return `1 hour and ${parseInt((inSecs - 3600) / 60)} minutes`
+    }
+    return `${parseInt(inSecs / 60)} minutes`
 }
