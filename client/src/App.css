@@ -83,7 +83,7 @@ button {
     width: 20%;
     left: 0%
   }
-  
+
   100% {
     width: 100%;
   }
@@ -517,7 +517,7 @@ li {
   width: fit-content;
   /* height: 90px; */
   cursor: pointer;
-  margin: 5px 5px 20px 5px;
+  margin: 15px 5px 15px 5px;
   border: 1px solid #dbe0e6cf;
 }
 
@@ -549,6 +549,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 
 .card-title {
   margin: 0;
@@ -1232,7 +1233,7 @@ h3 {
   }
 
   ::-webkit-scrollbar {
-  display: none;
+    display: none;
   }
 
   .track-list {
