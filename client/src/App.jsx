@@ -29,7 +29,7 @@ function App() {
 
       navigate('/Home')
     }
-    else if (!isLogged || searchParams.get('error')) {
+    else if (!isLogged || searchParams.get('error') || location.pathname === '/') {
 
       navigate('/Login')
     }
