@@ -4,7 +4,7 @@ export default function ContentPresentation({ headerContent }) {
 
 
     return (
-        <div className="content-header glass">
+        <div className="content-header glass" key={headerContent.id}>
             <div className="content-header-info">
             <img src={headerContent.images[0].url} alt={`${headerContent.name}'s image`} className={headerContent.type === 'album' ? 'header-album' : 'header-artist'} />
 
