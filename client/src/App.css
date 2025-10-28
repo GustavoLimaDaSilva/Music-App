@@ -11,6 +11,7 @@
   --contrast-clr: #353952;
   --menu-icon-size: clamp(1rem, 3vw, 1.9rem);
   --dropdown-font-size: clamp(6.3px, .8vw, 1rem);
+  --dropdown-block-padding: .4rem;
   --progress-width: 0;
   --player-border-radius: 20px;
   --list-height: 560px
@@ -64,9 +65,28 @@ button {
   backdrop-filter: blur(50px);
   -webkit-backdrop-filter: blur(9px);
   background-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 30px;
+}
+
+@keyframes slide-to-right {
+
+  0% {
+    width: 0%;
+    left: 10%;
+  }
+
+  25% {
+    left: 5%
+  }
+
+  50% {
+    width: 20%;
+    left: 0%
+  }
+  
+  100% {
+    width: 100%;
+  }
 }
 
 @keyframes spin {
@@ -210,11 +230,15 @@ li {
 }
 
 .login-wrapper {
-  margin-block: 20vh;
-  margin-inline: 30vw;
-  padding-inline: 5px;
-  min-width: min-content;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  padding-inline: 10px;
+  height: fit-content;
+  width: fit-content;
+  max-width: 85%;
   text-align: center;
+  border-radius: 30px;
 }
 
 .login-wrapper>* {
@@ -223,7 +247,7 @@ li {
 
 .login-wrapper h1 {
   color: black;
-  font-size: clamp(1.8rem, 4vw, 5vw);
+  font-size: clamp(3vw, 2.5rem, 6rem);
   animation: font-fade-in 1.5s forwards;
 }
 
@@ -248,7 +272,7 @@ li {
 .login-wrapper small {
 
   font-size: 10px;
-
+  padding: 10px 2px;
 }
 
 .header-wrapper {
@@ -290,16 +314,20 @@ li {
 
 .navlink {
   margin: 1.5rem;
-  width: fit-content
+  width: fit-content;
+  position: relative;
 }
 
-.navlink:hover span {
-  color: #39FF14;
-  transition: color .3s ease-in-out;
-}
 
-.navlink.active {
-  border-bottom: #dbe0e6cf 3px solid;
+.navlink.active span::before {
+  content: '';
+  height: 4px;
+  border-radius: 15px;
+  background-color: #eef1f5;
+  position: absolute;
+  bottom: 1px;
+  left: 0px;
+  animation: forwards .2s slide-to-right ease-in;
 }
 
 .nav .btn {
@@ -384,8 +412,9 @@ li {
   font-size: calc(var(--responsive-font) - 2px);
   transition: opacity 0.2s ease-in-out;
   top: 65%;
-  right: -90%;
+  right: 0%;
   position: absolute;
+  color: black;
   z-index: 10;
 }
 
@@ -425,6 +454,13 @@ li {
 
   opacity: 1
 }
+
+.account-icon:hover,
+.navlink:hover span {
+  color: #39FF14;
+  transition: color .3s ease-in-out;
+}
+
 
 .content-wrapper {
   width: 85%;
@@ -551,7 +587,7 @@ a {
 }
 
 .card:hover .profile {
- transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 
@@ -710,7 +746,7 @@ li:last-of-type {
 }
 
 .content-wrapper li:first-of-type .dropdown-menu {
-  transform: translateY(101%);
+  transform: translateY(100%);
   bottom: 40px;
   /* right: 20px; */
   background-color: gray;
@@ -726,7 +762,7 @@ li:last-of-type {
   width: clamp(90px, 15vw, 18vw);
   display: none;
   padding-inline: 0px;
-  z-index: 10
+  z-index: 10;
 }
 
 .dropdown-menu,
@@ -752,12 +788,9 @@ li:last-of-type {
 
 .dropdown-item {
   z-index: 10;
-  padding-block: .4rem;
-  width: 100%;
   text-wrap: nowrap;
   text-align: left;
   color: white;
-  /* border: 1px solid green; */
 }
 
 .dropdown-svg {
@@ -766,7 +799,10 @@ li:last-of-type {
   max-height: var(--dropdown-font-size);
 }
 
+
+.dropdown-item:not(:has(a)),
 .dropdown-item a {
+  padding-block: .3rem;
   width: 100%;
 }
 
@@ -1192,6 +1228,11 @@ h3 {
 
   .content-wrapper {
     height: 81vh;
+    width: 95vw;
+  }
+
+  ::-webkit-scrollbar {
+  display: none;
   }
 
   .track-list {
