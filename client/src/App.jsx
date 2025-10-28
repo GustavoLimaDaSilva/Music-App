@@ -1,6 +1,6 @@
 import './App.css'
 import { getQueryParams } from '../index.js';
-import { useLocation } from 'react-router';
+import { useLocation, useSearchParams } from 'react-router';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import Navbar from './components/navbar'
@@ -18,17 +18,18 @@ function App() {
   const [userInput, setUserInput] = useState('')
   const [toastProps, setToastProps] = useState({})
   const { isLoading, isLogged, userCredentials } = useContext(AuthContext)
+  const [searchParams, setSearchParams] = useSearchParams();
 
 
   useEffect(() => {
 
-    if (!isLoading) return
+    if (isLoading) return
 
-    if ((isLogged || location.search) && location.pathname === '/') {
+    if (isLogged && location.pathname === '/' && searchParams.get('code')) {
 
       navigate('/Home')
     }
-    else if (!isLogged && location.pathname === '/') {
+    else if (!isLogged || searchParams.get('error')) {
 
       navigate('/Login')
     }

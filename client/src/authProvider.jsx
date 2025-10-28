@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
-import { getToken, refreshAccessToken, getQueryParams, deleteQueryString } from '..';
+import { getToken, refreshAccessToken, getQueryParams} from '..';
 
 export const AuthContext = createContext(null)
 
@@ -7,7 +7,7 @@ export default function AuthProvider({ children }) {
 
     const [userCredentials, setUserCredentials] = useState({})
     const [isLogged, setIsLogged] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
 
     useEffect(() => {
@@ -15,13 +15,13 @@ export default function AuthProvider({ children }) {
         if (userCredentials.accessToken) {
 
             setIsLoading(false)
-            return setIsLogged(true)
+            setIsLogged(true)
+            return
         }
 
-        setIsLoading(true)
         const query = getQueryParams()
-
         query.code ? logIn(userCredentials, setUserCredentials) : refreshToken(userCredentials, setUserCredentials)
+
     }, [userCredentials.accessToken])
 
 
