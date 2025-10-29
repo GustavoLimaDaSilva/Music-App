@@ -9,6 +9,7 @@ import Toast from './components/Toast.jsx';
 import PlayBar from './components/playerBar.jsx';
 import { AuthContext } from './authProvider.jsx';
 import useStream from "./hooks/useStream";
+import Spinner from './components/spinner.jsx';
 export const AppContext = createContext(null)
 function App() {
 
@@ -47,6 +48,8 @@ function App() {
 
   return (
     <>
+    {isLoading ? <Spinner/> :
+      <>
       <Header userInput={userInput} setUserInput={setUserInput} />
       <main className="main-wrapper">
         <Navbar />
@@ -59,6 +62,8 @@ function App() {
       </main>
       <PlayBar />
     </>
+    }
+      </>
   )
 }
 
