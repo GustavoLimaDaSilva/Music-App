@@ -155,6 +155,7 @@ button {
   }
 }
 
+
 .spinner {
   position: absolute;
   inset: 0;
@@ -366,6 +367,7 @@ li {
 
   font-size: calc(2vw + 1.1rem);
   font-weight: 150;
+  color: black;
 }
 
 
@@ -632,14 +634,7 @@ button:has(.scroll-arrow) {
 }
 
 .content-wrapper .track-list::-webkit-scrollbar {
-  width: 15px;
-}
-
-.content-wrapper .track-list::-webkit-scrollbar-thumb {
-
-  border-radius: 50px;
-  background: rgba(174, 174, 174, 0.774);
-  /* height: 20%; */
+  display: none;
 }
 
 
@@ -737,7 +732,7 @@ li:last-of-type {
 
 
 .menu-icon {
-  /* color: gray; */
+  color: black;
   font-size: var(--menu-icon-size);
 }
 
@@ -933,7 +928,15 @@ li:last-of-type {
   border: 2px solid #eef1f5;
   border-radius: 15px;
   padding: .3rem 1rem;
-  font-size: var(--responsive-font)
+  font-size: var(--responsive-font);
+  transition: .2s background-color;
+}
+
+.content-actions-btn:hover {
+
+  /* color: #353952; */
+  background-color: #eef1f5;
+  /* border: #353952 2px solid; */
 }
 
 .player-bar {
@@ -1232,18 +1235,9 @@ h3 {
     width: 95vw;
   }
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
   .track-list {
     height: 100vh;
   }
-
-  /* .content-layout-root {
-
-    height: 30vh
-  } */
 
   .content-layout-root .track-list {
 
