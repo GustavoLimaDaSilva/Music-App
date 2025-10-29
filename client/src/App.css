@@ -930,11 +930,11 @@ li:last-of-type {
   padding: .3rem 1rem;
   font-size: var(--responsive-font);
   transition: .2s background-color;
+  color: black;
 }
 
 .content-actions-btn:hover {
 
-  /* color: #353952; */
   background-color: #eef1f5;
   /* border: #353952 2px solid; */
 }
