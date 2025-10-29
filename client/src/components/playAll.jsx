@@ -9,12 +9,12 @@ export default function ContentButton({ tracks }) {
   const { userCredentials } = useContext(AuthContext)
   const { setToastProps } = useContext(AppContext)
 
-  return (<>
+return (<>
     <button className="content-actions-btn" onClick={() => {
 
       userCredentials.userInfo?.product !== 'premium' ? setToastProps({text: "This action requires a premium account."}) : setToStream([tracks])
 
-    }}>Play All</button>
+    }}>{toStream?.[4].id === tracks[4].id ? 'Playing' : 'Play All'}</button>
   </>
   )
 }
